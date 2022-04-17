@@ -1,7 +1,9 @@
-.main {
+.bowls {
   background-color: black;
-  height: 200px;
-  z-index: 1;
+  height: 220px;
+  padding-top: 20px;
+  padding-bottom: 20px;
+  position: relative;
 }
 
 .top {
@@ -38,7 +40,7 @@
   background-color: transparent;
   height: 75px;
   width: 22px;
-  position: fixed;
+  position: absolute;
   z-index: 3;
 }
 
@@ -47,14 +49,32 @@
   top: 125px;
 }
 
+.pum1 {
+  -webkit-animation: pum1 1s forwards linear;
+  animation: pum1 1s forwards linear;
+}
+
+@keyframes pum1 {
+  50% {
+    transform: rotate(-12deg);
+    left: 180px;
+    top: 125px;
+  }
+  100% {
+    transform: rotate(-435deg);
+    top: 20px;
+    left: 20px;
+  }
+}
+
 .pin2 {
   left: 150px;
-  top: 75px;
+  top: 95px;
 }
 
 .pin3 {
   left: 210px;
-  top: 75px;
+  top: 95px;
 }
 
 .pin4 {
@@ -86,22 +106,4 @@
 
 .pin10 {
   left: 270px;
-}
-
-.pum1 {
-  -webkit-animation: pum1 2s forwards linear;
-  animation: pum1 2s forwards linear;
-}
-
-@keyframes pum1 {
-  50% {
-    transform: rotate(-1121deg);
-    top: 125px;
-    left: 180px;
-  }
-  100% {
-    transform: rotate(-1641deg);
-    top: 20px;
-    left: 20px;
-  }
 }
