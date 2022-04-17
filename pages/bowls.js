@@ -10,7 +10,7 @@ function bowl(num) {
     <div
       id={'pin' + num}
       className={styles.bowl + ' ' + styles['pin' + num]}
-      onClick={(e) => changePum(e)}
+      onClick={(e) => changePum(e, num)}
     >
       <div id="top" className={styles.top}></div>
       <div id="neck" className={styles.neck}></div>
@@ -19,15 +19,14 @@ function bowl(num) {
   );
 }
 
-function changePum(cmp) {
-  const className = document.getElementById('pin1').className;
-  console.log(cmp, className);
-  document.getElementById('pin1').className += ' ' + styles['pum1'];
+function changePum(cmp, num) {
+  console.log(cmp);
+  document.getElementById('pin' + num).className += ' ' + styles['pum' + num];
 }
 
 export default function Bowls() {
   return (
-    <div id="container">
+    <div id="container" className={styles.container}>
       <div id="buttons">
         <button />
       </div>

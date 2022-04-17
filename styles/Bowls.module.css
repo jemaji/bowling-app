@@ -1,5 +1,8 @@
+.container {
+  background-image: url('../images/pista.jpeg');
+}
+
 .bowls {
-  background-color: black;
   height: 220px;
   padding-top: 20px;
   padding-bottom: 20px;
@@ -23,6 +26,8 @@
   width: 6px;
   height: 8px;
   left: 7px;
+  border-left: 1px solid black;
+  border-right: 1px solid black;
   position: relative;
   background-color: white;
   border-bottom: 3px solid red;
@@ -31,6 +36,9 @@
 .bottom {
   height: 50px;
   width: 20px;
+  border-left: 1px solid black;
+  border-right: 1px solid black;
+  border-bottom: 1px solid black;
   border-radius: 10px/20px;
   background-color: white;
 }
