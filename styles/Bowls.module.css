@@ -1,0 +1,107 @@
+.main {
+  background-color: black;
+  height: 200px;
+  z-index: 1;
+}
+
+.top {
+  width: 10px;
+  height: 15px;
+  position: relative;
+  left: 5px;
+  border-top: 1px solid black;
+  border-left: 1px solid black;
+  border-right: 1px solid black;
+  border-bottom: 3px solid red;
+  border-radius: 50px;
+  background-color: white;
+}
+
+.neck {
+  width: 6px;
+  height: 8px;
+  left: 7px;
+  position: relative;
+  background-color: white;
+  border-bottom: 3px solid red;
+}
+
+.bottom {
+  height: 50px;
+  width: 20px;
+  border-radius: 10px/20px;
+  background-color: white;
+}
+
+.bowl {
+  border: none;
+  background-color: transparent;
+  height: 75px;
+  width: 22px;
+  position: fixed;
+  z-index: 3;
+}
+
+.pin1 {
+  left: 180px;
+  top: 125px;
+}
+
+.pin2 {
+  left: 150px;
+  top: 75px;
+}
+
+.pin3 {
+  left: 210px;
+  top: 75px;
+}
+
+.pin4 {
+  left: 120px;
+  top: 50px;
+}
+
+.pin5 {
+  left: 180px;
+  top: 50px;
+}
+
+.pin6 {
+  left: 240px;
+  top: 50px;
+}
+
+.pin7 {
+  left: 90px;
+}
+
+.pin8 {
+  left: 150px;
+}
+
+.pin9 {
+  left: 210px;
+}
+
+.pin10 {
+  left: 270px;
+}
+
+.pum1 {
+  -webkit-animation: pum1 2s forwards linear;
+  animation: pum1 2s forwards linear;
+}
+
+@keyframes pum1 {
+  50% {
+    transform: rotate(-1121deg);
+    top: 125px;
+    left: 180px;
+  }
+  100% {
+    transform: rotate(-1641deg);
+    top: 20px;
+    left: 20px;
+  }
+}
