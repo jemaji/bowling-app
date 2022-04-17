@@ -1,5 +1,49 @@
 .container {
   background-image: url('../images/pista.jpeg');
+  width: 380px;
+}
+
+.buttons {
+  height: 30px;
+}
+
+.scoreBox {
+  margin: 0 150px 20px 150px ;
+  height: 70px;
+  border:3px solid grey;
+}
+
+.headerBox {
+  border-bottom: 3px solid black;
+  text-align: center;
+}
+
+.rowA {
+  height: 20px;
+}
+
+.columnA {
+  display: inline-block;
+  position: relative;
+  width: 50%;
+  height: 100%;
+  text-align: center;
+}
+
+.columnB {
+  display: inline-block;
+  position: relative;
+  width: 50%;
+  height: 100%;
+  text-align: center;
+  border-left: 1px solid black;
+  border-bottom: 1px solid black;
+}
+
+.rowB {
+  position: relative;
+  text-align: center;
+  margin-top: 5px;
 }
 
 .bowls {
