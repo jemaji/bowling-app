@@ -102,7 +102,6 @@
 }
 
 .pum1 {
-  -webkit-animation: pum1 1s forwards linear;
   animation: pum1 1s forwards linear;
 }
 
@@ -115,7 +114,7 @@
   100% {
     transform: rotate(-435deg);
     top: 20px;
-    left: 20px;
+    left: 30px;
   }
 }
 
@@ -124,9 +123,43 @@
   top: 95px;
 }
 
+.pum2 {
+  animation: pum2 1s forwards linear;
+}
+
+@keyframes pum2 {
+  50% {
+    transform: rotate(-12deg);
+    left: 150px;
+    top: 95px;
+  }
+  100% {
+    transform: rotate(-315deg);
+    top: 0px;
+    left: 40px;
+  }
+}
+
 .pin3 {
   left: 210px;
   top: 95px;
+}
+
+.pum3 {
+  animation: pum3 1s forwards linear;
+}
+
+@keyframes pum3 {
+  50% {
+    transform: rotate(12deg);
+    left: 210px;
+    top: 95px;
+  }
+  100% {
+    transform: rotate(-435deg);
+    top: 20px;
+    left: 330px;
+  }
 }
 
 .pin4 {
@@ -134,9 +167,43 @@
   top: 50px;
 }
 
+.pum4 {
+  animation: pum4 1s forwards linear;
+}
+
+@keyframes pum4 {
+  50% {
+    transform: rotate(-22deg);
+    left: 120x;
+    top: 50px;
+  }
+  100% {
+    transform: rotate(-415deg);
+    top: 10px;
+    left: 40px;
+  }
+}
+
 .pin5 {
   left: 180px;
   top: 50px;
+}
+
+.pum5 {
+  animation: pum5 1s forwards linear;
+}
+
+@keyframes pum5 {
+  50% {
+    transform: rotate(22deg);
+    left: 180x;
+    top: 50px;
+  }
+  100% {
+    transform: rotate(-415deg);
+    top: 10px;
+    left: 340px;
+  }
 }
 
 .pin6 {
@@ -144,18 +211,96 @@
   top: 50px;
 }
 
+.pum6 {
+  animation: pum6 1s forwards linear;
+}
+
+@keyframes pum6 {
+  50% {
+    transform: rotate(12deg);
+    left: 240px;
+    top: 50px;
+  }
+  100% {
+    transform: rotate(-315deg);
+    top: 0px;
+    left: 340px;
+  }
+}
+
 .pin7 {
   left: 90px;
+}
+
+.pum7 {
+  animation: pum7 1s forwards linear;
+}
+
+@keyframes pum7 {
+  50% {
+    transform: rotate(-12deg);
+    left: 90px;
+  }
+  100% {
+    transform: rotate(-385deg);
+    left: 34px;
+  }
 }
 
 .pin8 {
   left: 150px;
 }
 
+.pum8 {
+  animation: pum8 1s forwards linear;
+}
+
+@keyframes pum8 {
+  50% {
+    transform: rotate(-12deg);
+    left: 150px;
+  }
+  100% {
+    transform: rotate(-305deg);
+    left: 42px;
+  }
+}
+
 .pin9 {
   left: 210px;
 }
 
+.pum9 {
+  animation: pum9 1s forwards linear;
+}
+
+@keyframes pum9 {
+  50% {
+    transform: rotate(12deg);
+    left: 210px;
+  }
+  100% {
+    transform: rotate(-305deg);
+    left: 320px;
+  }
+}
+
 .pin10 {
   left: 270px;
+}
+
+.pum10 {
+  animation: pum10 1s forwards linear;
+}
+
+@keyframes pum10 {
+  50% {
+    transform: rotate(12deg);
+    left: 270px;
+  }
+  100% {
+    transform: rotate(-385deg);
+    top: 5px;
+    left: 320px;
+  }
 }

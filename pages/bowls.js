@@ -13,6 +13,20 @@ let data = {
   }
 };
 
+function spare() {
+  console.log('PENDING SPARE');
+}
+
+function next() {
+  console.log('PENDING NEXT');
+}
+
+function strike(event) {
+  for (let index = 1; index <= 10; index++) {
+    changePum(event, index);    
+  }
+}
+
 function score(num) {
   return (
     <div id="scoreBox" className={styles.scoreBox}>
@@ -51,8 +65,9 @@ export default function Bowls() {
     <div id="container" className={styles.container}>
       <div id="buttons" className={styles.buttons}>
         <button id="reset" onClick={reset}>RESET</button>
-        <button id="strike">STRIKE</button>
-        <button id="spare">SPARE</button>
+        <button id="strike" onClick={strike}>STRIKE</button>
+        <button id="spare" onClick={spare}>SPARE</button>
+        <button id="next" onClick={next}>NEXT</button>
       </div>
       {score(2)}
       <div id="bowls" className={styles.bowls}>
