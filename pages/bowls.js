@@ -12,7 +12,7 @@ export default function Bowls() {
       (roundNumberAcc, roundNumberCurr) => {
         roundNumberAcc[roundNumberCurr] = throwNumbers.reduce(
           (throwNumberAcc, throwNumberCurr) => {
-            throwNumberAcc[throwNumberCurr] = [];
+            throwNumberAcc[throwNumberCurr] = new Set();
             return throwNumberAcc;
           }, {}
         );
@@ -44,8 +44,8 @@ export default function Bowls() {
     setCurrentThow(2);
     const pinNumbers = Array.from({length: 10}, (_, i) => i+1);
     pinNumbers.forEach((pinNumber) => {
-      if(!rounds[currentRound][1].includes(pinNumber)) {
-        rounds[currentRound][2].push(pinNumber);
+      if(!rounds[currentRound][1].has(pinNumber)) {
+        rounds[currentRound][2].add(pinNumber);
       }
     });
     setRounds({...rounds});
@@ -61,7 +61,7 @@ export default function Bowls() {
   };
 
   const showScoreFirstThrow = () => {
-    const amount = rounds[currentRound][1].length;
+    const amount = rounds[currentRound][1].size;
 
     if (amount == 10) {
       return '';
@@ -75,15 +75,15 @@ export default function Bowls() {
   };
 
   const showScoreSecondThrow = () => {
-    if (rounds[currentRound][1].length == 10) {
+    if (rounds[currentRound][1].size == 10) {
       return 'X';
     }
 
-    if (rounds[currentRound][2].length == 0) {
+    if (rounds[currentRound][2].size == 0) {
       return '-';
     }
 
-    const amount = rounds[currentRound][1].length + rounds[currentRound][2].length;
+    const amount = rounds[currentRound][1].size + rounds[currentRound][2].size;
 
     if (amount == 10) {
       return '/';
@@ -100,20 +100,20 @@ export default function Bowls() {
 
         Object.values(rounds[roundNumberAcc]).forEach((pinsNumbers) => {
           roundNumberAcc = Number(roundNumberAcc);
-          amount += pinsNumbers.length;
+          amount += pinsNumbers.size;
         });
 
         if(roundNumber == roundNumberAcc) return;
 
         if(isSpare(roundNumberAcc)) {
           console.log('isSpare');
-          amount += rounds[roundNumberAcc+1][1].length;
+          amount += rounds[roundNumberAcc+1][1].size;
         }
         if(isStrike(roundNumberAcc)) {
           if(isStrike(roundNumberAcc + 1)) {
-            amount += rounds[roundNumberAcc+1][1].length + rounds[roundNumberAcc+2][1].length;
+            amount += rounds[roundNumberAcc+1][1].size + rounds[roundNumberAcc+2][1].size;
           } else {
-            amount += rounds[roundNumberAcc+1][1].length + rounds[roundNumberAcc+1][2].length;
+            amount += rounds[roundNumberAcc+1][1].size + rounds[roundNumberAcc+1][2].size;
           }
         }
       }
@@ -123,12 +123,12 @@ export default function Bowls() {
 
   const isSpare = (roundNumber) => {
     const round = rounds[roundNumber];
-    return round[1].length < 10 && (round[1].length + round[2].length) == 10;
+    return round[1].size < 10 && (round[1].size + round[2].size) == 10;
   };
 
   const isStrike = (roundNumber) => {
     const round = rounds[roundNumber];
-    return round[1].length == 10;
+    return round[1].size == 10;
   };
 
   const score = () => (
@@ -147,8 +147,8 @@ export default function Bowls() {
   const bowl = (num) => (
     <div
       id={'pin' + num}
-      className={styles.bowl + ' ' + styles['pin' + num] + (rounds[currentRound][1].includes(num) || rounds[currentRound][2].includes(num) ? (' ' + styles['pum' + num]) : '')}
-      onClick={() => {rounds[currentRound][currentThow].push(num); setRounds({...(rounds)});}}
+      className={styles.bowl + ' ' + styles['pin' + num] + (rounds[currentRound][1].has(num) || rounds[currentRound][2].has(num) ? (' ' + styles['pum' + num]) : '')}
+      onClick={() => {rounds[currentRound][currentThow].add(num); setRounds({...(rounds)});}}
       style={{backgroundImage: `url(${bowlBackground.src})`}}
     ></div>
   );
