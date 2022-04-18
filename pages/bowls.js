@@ -101,20 +101,21 @@ export default function Bowls() {
         Object.values(rounds[roundNumberAcc]).forEach((pinsNumbers) => {
           roundNumberAcc = Number(roundNumberAcc);
           amount += pinsNumbers.length;
+        });
 
-          if(roundNumber == roundNumberAcc) return;
+        if(roundNumber == roundNumberAcc) return;
 
-          if(isSpare(roundNumberAcc)) {
-            console.log('isSpare');
-            amount += rounds[roundNumberAcc+1][1].length;
-          }
-          if(isStrike(roundNumberAcc)) {
-            if(isStrike(roundNumberAcc + 1)) {
-              amount += rounds[roundNumberAcc+1][1].length + rounds[roundNumberAcc+2][1].length;
-            }
+        if(isSpare(roundNumberAcc)) {
+          console.log('isSpare');
+          amount += rounds[roundNumberAcc+1][1].length;
+        }
+        if(isStrike(roundNumberAcc)) {
+          if(isStrike(roundNumberAcc + 1)) {
+            amount += rounds[roundNumberAcc+1][1].length + rounds[roundNumberAcc+2][1].length;
+          } else {
             amount += rounds[roundNumberAcc+1][1].length + rounds[roundNumberAcc+1][2].length;
           }
-        });
+        }
       }
     );
     return amount;
