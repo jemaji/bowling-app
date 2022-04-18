@@ -1,6 +1,8 @@
 import styles from '../styles/Bowls.module.css';
 import Router from 'next/router';
 import { useState } from 'react';
+import bowlBackground from '../assets/images/pin.png'
+
 
 export default function Bowls() {
   const getInitialRounds = () => {
@@ -146,11 +148,8 @@ export default function Bowls() {
       id={'pin' + num}
       className={styles.bowl + ' ' + styles['pin' + num] + (rounds[currentRound][1].includes(num) || rounds[currentRound][2].includes(num) ? (' ' + styles['pum' + num]) : '')}
       onClick={() => {rounds[currentRound][currentThow].push(num); setRounds({...(rounds)});}}
-    >
-      <div id="top" className={styles.top}></div>
-      <div id="neck" className={styles.neck}></div>
-      <div id="bottom" className={styles.bottom}></div>
-    </div>
+      style={{backgroundImage: `url(${bowlBackground.src})`}}
+    ></div>
   );
 
   return (
