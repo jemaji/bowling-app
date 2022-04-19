@@ -1,14 +1,22 @@
 .container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
   background-image: url('../images/pista.jpeg');
   width: 380px;
+  height: 900px;
 }
 
 .buttons {
   height: 30px;
+  display: flex;
+  justify-content: space-around;
+  width: 80%;
+  margin: 5px 0;
 }
 
 .scoreBox {
-  margin: 0 150px 20px 150px ;
+  width: 10em;
   height: 70px;
   border:3px solid grey;
 }
@@ -48,225 +56,293 @@
 
 .bowls {
   height: 220px;
-  padding-top: 20px;
-  padding-bottom: 20px;
+  margin-top: 20px;
+  margin-bottom: 20px;
+  left: -11px; /* Middle of ping width */
   position: relative;
 }
 
 .bowl {
+  position: absolute;
+  z-index: 3;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+}
+
+.pinTop {
   border: none;
   background-size: 100%;
   height: 67px;
   width: 22px;
-  position: absolute;
+  z-index: 3;
+}
+
+.animatedPin {
+  animation: moveIt 1.5s ease-in-out infinite;
+  transform-origin: 50% 75%;
+}
+
+.pinShawod {
+  width: 8px;
+  height: 7px;
+  margin-top: -5px;
+  background: rgba(0, 0, 0, 0.2);
+  border-radius: 50%;
+  z-index: 1;
+}
+
+.animatedPinShadow {
+  animation: moveShade 1.5s ease-in-out infinite;
+}
+
+@keyframes moveIt {
+  from {transform: rotate(0deg); opacity: 100%; animation-timing-function: ease-out;}
+  25% {transform: rotate(8deg); opacity: 80%; animation-timing-function: ease-in;}
+  50% {transform: rotate(0deg); opacity: 100%; animation-timing-function: ease-out;}
+  75% {transform: rotate(-8deg); opacity: 80%; animation-timing-function: ease-in;}
+  to {transform: rotate(0deg);opacity: 100%; }
+}
+
+@keyframes moveShade {
+  from {transform: translateX(0px); filter: blur(3px); opacity: 100%; animation-timing-function: ease-out;}
+  25% {transform: translateX(10px) scale(3, 0.9); filter: blur(4px); opacity: 80%; animation-timing-function: ease-in;}
+  50% {transform: translateX(0px); filter: blur(3px); opacity: 100%; animation-timing-function: ease-out;}
+  75% {transform: translateX(-10px) scale(3, .9); filter: blur(4px); opacity: 80%; animation-timing-function: ease-in;}
+  to {transform: translateX(0px); filter: blur(3px); opacity: 100%;}
+}
+
+.ball {
+  border: none;
+  background-size: 100%;
+  height: 180px;
+  width: 180px;
+  padding-top: 72px;
   z-index: 3;
 }
 
 .pin1 {
-  left: 180px;
-  top: 125px;
+  top: 135px;
+}
+
+.pin2 {
+  left: -30px;
+  top: 90px;
+}
+
+.pin3 {
+  left: 30px;
+  top: 90px;
+}
+
+.pin4 {
+  left: -60px;
+  top: 45px;
+}
+
+.pin5 {
+  top: 45px;
+}
+
+.pin6 {
+  left: 60px;
+  top: 45px;
+}
+
+.pin7 {
+  left: -90px;
+}
+
+.pin8 {
+  left: -30px;
+}
+
+.pin9 {
+  left: 30px;
+}
+
+.pin10 {
+  left: 90px;
 }
 
 .pum1 {
   animation: pum1 1s forwards linear;
 }
 
-@keyframes pum1 {
-  50% {
-    transform: rotate(-12deg);
-    left: 180px;
-    top: 125px;
-  }
-  100% {
-    transform: rotate(-435deg);
-    top: 20px;
-    left: 30px;
-  }
-}
-
-.pin2 {
-  left: 150px;
-  top: 95px;
-}
 
 .pum2 {
   animation: pum2 1s forwards linear;
 }
 
-@keyframes pum2 {
-  50% {
-    transform: rotate(-12deg);
-    left: 150px;
-    top: 95px;
-  }
-  100% {
-    transform: rotate(-315deg);
-    top: 0px;
-    left: 40px;
-  }
-}
-
-.pin3 {
-  left: 210px;
-  top: 95px;
-}
 
 .pum3 {
   animation: pum3 1s forwards linear;
 }
 
-@keyframes pum3 {
-  50% {
-    transform: rotate(12deg);
-    left: 210px;
-    top: 95px;
-  }
-  100% {
-    transform: rotate(-435deg);
-    top: 20px;
-    left: 330px;
-  }
-}
-
-.pin4 {
-  left: 120px;
-  top: 50px;
-}
 
 .pum4 {
   animation: pum4 1s forwards linear;
 }
 
-@keyframes pum4 {
-  50% {
-    transform: rotate(-22deg);
-    left: 120x;
-    top: 50px;
-  }
-  100% {
-    transform: rotate(-415deg);
-    top: 10px;
-    left: 40px;
-  }
-}
-
-.pin5 {
-  left: 180px;
-  top: 50px;
-}
 
 .pum5 {
   animation: pum5 1s forwards linear;
 }
 
-@keyframes pum5 {
-  50% {
-    transform: rotate(22deg);
-    left: 180x;
-    top: 50px;
-  }
-  100% {
-    transform: rotate(-415deg);
-    top: 10px;
-    left: 340px;
-  }
-}
-
-.pin6 {
-  left: 240px;
-  top: 50px;
-}
 
 .pum6 {
   animation: pum6 1s forwards linear;
 }
 
-@keyframes pum6 {
-  50% {
-    transform: rotate(12deg);
-    left: 240px;
-    top: 50px;
-  }
-  100% {
-    transform: rotate(-315deg);
-    top: 0px;
-    left: 340px;
-  }
-}
-
-.pin7 {
-  left: 90px;
-}
 
 .pum7 {
   animation: pum7 1s forwards linear;
 }
 
-@keyframes pum7 {
-  50% {
-    transform: rotate(-12deg);
-    left: 90px;
-  }
-  100% {
-    transform: rotate(-385deg);
-    left: 34px;
-  }
-}
-
-.pin8 {
-  left: 150px;
-}
 
 .pum8 {
   animation: pum8 1s forwards linear;
 }
 
-@keyframes pum8 {
-  50% {
-    transform: rotate(-12deg);
-    left: 150px;
-  }
-  100% {
-    transform: rotate(-305deg);
-    left: 42px;
-  }
-}
-
-.pin9 {
-  left: 210px;
-}
 
 .pum9 {
   animation: pum9 1s forwards linear;
 }
 
-@keyframes pum9 {
-  50% {
-    transform: rotate(12deg);
-    left: 210px;
-  }
-  100% {
-    transform: rotate(-305deg);
-    left: 320px;
-  }
-}
-
-.pin10 {
-  left: 270px;
-}
 
 .pum10 {
   animation: pum10 1s forwards linear;
 }
 
+@keyframes pum1 {
+  50% {
+    transform: rotate(22deg);
+    opacity: 100%;
+    left: -10x;
+    top: 110px;
+  }
+  100% {
+    transform: rotate(-215deg);
+    opacity: 0;
+    left: -70x;
+    top: 0px;
+  }
+}
+
+@keyframes pum2 {
+  50% {
+    transform: rotate(-12deg);
+    opacity: 100%;
+    top: 80px;
+    left: -35px;
+  }
+  100% {
+    transform: rotate(-155deg);
+    opacity: 0;
+    top: 0px;
+    left: -80px;
+  }
+}
+
+@keyframes pum3 {
+  50% {
+    transform: rotate(12deg);
+    left: 40px;
+    opacity: 100%;
+    top: 80px;
+  }
+  100% {
+    transform: rotate(-235deg);
+    opacity: 0;
+    top: 20px;
+    left: 120px;
+  }
+}
+
+@keyframes pum4 {
+  50% {
+    transform: rotate(-22deg);
+    opacity: 100%;
+    left: -60x;
+    top: 30px;
+  }
+  100% {
+    transform: rotate(-215deg);
+    opacity: 0;
+    left: -100px;
+  }
+}
+
+@keyframes pum5 {
+  50% {
+    transform: rotate(22deg);
+    opacity: 100%;
+    left: -10x;
+    top: 30px;
+  }
+  100% {
+    transform: rotate(-215deg);
+    opacity: 0;
+    left: -10x;
+    top: 0px;
+  }
+}
+
+@keyframes pum6 {
+  50% {
+    transform: rotate(12deg);
+    opacity: 100%;
+    left: 60px;
+    top: 30px;
+  }
+  100% {
+    transform: rotate(-315deg);
+    opacity: 0;
+    left: 100px;
+  }
+}
+
+@keyframes pum7 {
+  50% {
+    transform: rotate(-12deg);
+    opacity: 100%;
+  }
+  100% {
+    transform: rotate(-165deg);
+    opacity: 0;
+  }
+}
+
+@keyframes pum8 {
+  50% {
+    transform: rotate(-12deg);
+    opacity: 100%;
+  }
+  100% {
+    transform: rotate(-155deg);
+    opacity: 0;
+  }
+}
+
+@keyframes pum9 {
+  50% {
+    transform: rotate(12deg);
+    opacity: 100%;
+  }
+  100% {
+    transform: rotate(-155deg);
+    opacity: 0;
+  }
+}
+
 @keyframes pum10 {
   50% {
     transform: rotate(12deg);
-    left: 270px;
+    opacity: 100%;
   }
   100% {
-    transform: rotate(-385deg);
-    top: 5px;
-    left: 320px;
+    transform: rotate(-165deg);
+    opacity: 0;
   }
 }

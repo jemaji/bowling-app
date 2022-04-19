@@ -1,7 +1,8 @@
 import styles from '../styles/Bowls.module.css';
 import Router from 'next/router';
 import { useState } from 'react';
-import bowlBackground from '../assets/images/pin.png'
+import pinImage from '../assets/images/pin.png'
+import ballImage from '../assets/images/bowling-ball.png'
 
 
 export default function Bowls() {
@@ -24,6 +25,8 @@ export default function Bowls() {
   const [currentRound, setCurrentRound] = useState(1);
   const [currentThow, setCurrentThow] = useState(1);
   const [rounds, setRounds] = useState(getInitialRounds());
+  const [animatedPins, setAnimatedPins] = useState(new Set());
+  const [asyncLock, setAsyncLock] = useState(false);
 
   const initialiceProperties = () => {
     setCurrentRound(1);
@@ -52,12 +55,29 @@ export default function Bowls() {
   }
 
   const next = () => {
-    if(currentThow == 1) {
-      setCurrentThow(2);
+    if(currentThow == 2 || isStrike(currentRound)) {
+      setCurrentRound(currentRound + 1);
+      setCurrentThow(1);
       return;
     }
-    setCurrentRound(currentRound + 1);
-    setCurrentThow(1);
+    setCurrentThow(2);
+  };
+
+
+  const throwBall = () => {
+    if (!asyncLock) {
+      setAsyncLock(true);
+      rounds[currentRound][currentThow] = new Set(animatedPins);
+      setAnimatedPins(new Set()); 
+      setRounds({...(rounds)});
+      setTimeout(
+        () => {
+          next();
+          setAsyncLock(false);
+        },
+        1500
+      );
+    }
   };
 
   const showScoreFirstThrow = () => {
@@ -92,6 +112,15 @@ export default function Bowls() {
     return amount;
   };
 
+  const changePinActivation = (num) => {
+    if (animatedPins.size == animatedPins.add(num).size) {
+      animatedPins.delete(num);
+      setAnimatedPins(new Set(animatedPins));
+    } else {
+      setAnimatedPins(new Set(animatedPins));
+    }
+  };
+
   const getScore = (roundNumber) => {
     let amount = 0;
     Object.keys(rounds).forEach(
@@ -106,7 +135,6 @@ export default function Bowls() {
         if(roundNumber == roundNumberAcc) return;
 
         if(isSpare(roundNumberAcc)) {
-          console.log('isSpare');
           amount += rounds[roundNumberAcc+1][1].size;
         }
         if(isStrike(roundNumberAcc)) {
@@ -147,10 +175,25 @@ export default function Bowls() {
   const bowl = (num) => (
     <div
       id={'pin' + num}
-      className={styles.bowl + ' ' + styles['pin' + num] + (rounds[currentRound][1].has(num) || rounds[currentRound][2].has(num) ? (' ' + styles['pum' + num]) : '')}
-      onClick={() => {rounds[currentRound][currentThow].add(num); setRounds({...(rounds)});}}
-      style={{backgroundImage: `url(${bowlBackground.src})`}}
-    ></div>
+      className={
+        styles.bowl + ' ' +
+        styles['pin' + num] +
+        (rounds[currentRound][1].has(num) || rounds[currentRound][2].has(num) ? (' ' + styles['pum' + num]) : '')
+      }
+    >
+      <div
+        className={
+          styles.pinTop +
+          (animatedPins.has(num) ? ' ' + styles.animatedPin : '')
+        }
+        onClick={() => changePinActivation(num)}
+        style={{backgroundImage: `url(${pinImage.src})`}}
+      ></div>
+      <div className={
+        styles.pinShawod +
+        (animatedPins.has(num) ? ' ' + styles.animatedPinShadow : '')
+      }></div>
+    </div>
   );
 
   return (
@@ -173,6 +216,9 @@ export default function Bowls() {
         {bowl(8)}
         {bowl(9)}
         {bowl(10)}
+      </div>
+      <div id="ball" className={styles.ball} style={{backgroundImage: `url(${ballImage.src})`}} onClick={throwBall}>
+        <h2 style={{textAlign: `center`}}>LANZAR</h2>
       </div>
     </div>
   );
