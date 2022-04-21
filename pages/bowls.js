@@ -28,22 +28,26 @@ export default function Bowls() {
     setCurrentRound(1);
     setCurrentThow(1);
     setRounds(getInitialRounds());
+    document.getElementById('slide-'+currentRound).scrollIntoView();
   };
 
   const reset = () => initialiceProperties();
 
   const strike = (event) => {
+    throwBall();
     const pinNumbers = Array.from({ length: 10 }, (_, i) => i + 1);
-    rounds[currentRound][1] = pinNumbers;
+    pinNumbers.forEach((pinNumber) => {
+      rounds[currentRound][1].add(pinNumber);
+    });
     setRounds({ ...rounds });
-    setCurrentThow(2);
   };
 
   const spare = () => {
     setCurrentThow(2);
+    throwBall();
     const pinNumbers = Array.from({ length: 10 }, (_, i) => i + 1);
     pinNumbers.forEach((pinNumber) => {
-      if (!rounds[currentRound][1].has(pinNumber)) {
+      if (!rounds[currentRound][1]?.has(pinNumber)) {
         rounds[currentRound][2].add(pinNumber);
       }
     });
@@ -57,6 +61,7 @@ export default function Bowls() {
       return;
     }
     setCurrentThow(2);
+    document.getElementById('slide-'+currentRound).scrollIntoView();
   };
 
   const changeRollingBall = () => {
@@ -209,8 +214,8 @@ export default function Bowls() {
     <div id="container" className={styles.container}>
       <div id="buttons" className={styles.buttons}>
         <button id="reset" onClick={reset}>RESET</button>
-        <button id="strike" onClick={strike}>STRIKE</button>
-        <button id="spare" onClick={spare}>SPARE</button>
+        <button id="strike" disabled={currentThow != 1} onClick={strike}>STRIKE</button>
+        <button id="spare" disabled={currentThow != 2} onClick={spare}>SPARE</button>
         <button id="next" onClick={next}>NEXT</button>
       </div>
       <div className={styles.carousel}>
