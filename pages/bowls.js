@@ -88,8 +88,8 @@ export default function Bowls() {
     }
   };
 
-  const showScoreFirstThrow = () => {
-    const amount = rounds[currentRound][1].size;
+  const showScoreFirstThrow = (num) => {
+    const amount = rounds[num][1].size;
 
     if (amount == 10) {
       return '';
@@ -102,16 +102,16 @@ export default function Bowls() {
     return amount;
   };
 
-  const showScoreSecondThrow = () => {
-    if (rounds[currentRound][1].size == 10) {
+  const showScoreSecondThrow = (num) => {
+    if (rounds[num][1].size == 10) {
       return 'X';
     }
 
-    if (rounds[currentRound][2].size == 0) {
+    if (rounds[num][2].size == 0) {
       return '-';
     }
 
-    const amount = rounds[currentRound][1].size + rounds[currentRound][2].size;
+    const amount = rounds[num][1].size + rounds[num][2].size;
 
     if (amount == 10) {
       return '/';
@@ -173,8 +173,8 @@ export default function Bowls() {
         <div id={'headerBox' + num} className={styles.headerBox}>{num}</div>
         <div id={'bodyBox' + num} className={styles.bodyBox}>
           <div id={'rowA' + num} className={styles.rowA}>
-            <div id={'columnA' + num} className={styles.columnA}>{showScoreFirstThrow()}</div>
-            <div id={'columnB' + num} className={styles.columnB}>{showScoreSecondThrow()}</div>
+            <div id={'columnA' + num} className={styles.columnA}>{showScoreFirstThrow(num)}</div>
+            <div id={'columnB' + num} className={styles.columnB}>{showScoreSecondThrow(num)}</div>
           </div>
           <div id={'rowB' + num} className={styles.rowB}>{getScore(num)}</div>
         </div>
