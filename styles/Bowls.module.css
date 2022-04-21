@@ -15,6 +15,63 @@
   margin: 5px 0;
 }
 
+.carousel {
+  margin: 0 auto;
+  overflow: hidden;
+  text-align: center;
+  width: 100%;
+  height: 150px;
+  position: relative;
+}
+
+.slides {
+  display: flex;
+  overflow-x: scroll;
+  scroll-snap-type: x mandatory;
+  scroll-behavior: smooth;
+}
+
+.slides-item {
+  align-items: center;
+  border-radius: 10px;
+  display: flex;
+  flex-shrink: 0;
+  height: 75px;
+  justify-content: center;
+  margin: 0 1rem;
+  position: relative;
+  scroll-snap-align: start;
+  transform: scale(1);
+  transform-origin: center center;
+  transition: transform .5s;
+  width: 100%;
+}
+
+.carousel__nav {
+  padding: 1.25rem .5rem;
+}
+
+.slider-nav {
+  align-items: center;
+  background-color: #ddd;
+  border-radius: 50%;
+  color: #000;
+  display: inline-flex;
+  height: 1.5rem;
+  justify-content: center;
+  padding: .5rem;
+  position: relative;
+  text-decoration: none;
+  width: 1.5rem;
+  margin-left: 5px;
+}
+
+.slider-nav:hover,
+.slider-nav:active {
+  background-color: #000;
+  color: #fff;
+}
+
 .scoreBox {
   width: 10em;
   height: 70px;
@@ -77,6 +134,7 @@
   height: 67px;
   width: 22px;
   z-index: 3;
+  background-image: url('../assets/images/pin.png');
 }
 
 .animatedPin {
@@ -116,10 +174,29 @@
 .ball {
   border: none;
   background-size: 100%;
-  height: 180px;
-  width: 180px;
+  position: relative;
+  height: 90px;
+  width: 90px;
   padding-top: 72px;
   z-index: 3;
+  background-image: url('../assets/images/bowling-ball.png');
+}
+
+.animatedBall {
+  animation: rollingBall 0.5s forwards linear;
+}
+
+@keyframes rollingBall {
+  50% {
+    transform: rotate(22deg);
+    opacity: 100%;
+    top: 0px;
+  }
+  100% {
+    transform: rotate(-215deg);
+    opacity: 0;
+    top: -100px;
+  }
 }
 
 .pin1 {
