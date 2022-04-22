@@ -21,17 +21,22 @@ export default function Bowls() {
     );
   };
 
+  const [lastRound, setLastRound] = useState(1);
+  const [lastThow, setLastThow] = useState(1);
   const [currentRound, setCurrentRound] = useState(1);
   const [currentThow, setCurrentThow] = useState(1);
   const [rounds, setRounds] = useState(getInitialRounds());
   const [animatedPins, setAnimatedPins] = useState(new Set());
-  const [asyncLock, setAsyncLock] = useState(false);
+  const [rollingBall, setRollingBall] = useState(false);
 
   const initialiceProperties = () => {
+    setLastRound(1);
+    setLastThow(1);
     setCurrentRound(1);
     setCurrentThow(1);
     setRounds(getInitialRounds());
-    document.getElementById('slide-'+currentRound).scrollIntoView();
+    setRounds(new Set());
+    setRollingBall(false);
   };
 
   const reset = () => initialiceProperties();
@@ -58,38 +63,46 @@ export default function Bowls() {
   }
 
   const next = () => {
+    if (currentRound == lastRound && currentThow == lastThow) {
+      return nextLastRound();
+    }
+
+    // if the throw is a fix go to last round
+    return nextFixThrow();
+  };
+
+  const nextLastRound = () => {
     if (currentThow == 2 || isStrike(currentRound)) {
       setCurrentRound(currentRound + 1);
       setCurrentThow(1);
+      setLastRound(currentRound + 1);
+      setLastThow(1);
       return;
     }
     setCurrentThow(2);
-    document.getElementById('slide-'+currentRound).scrollIntoView();
+    setLastThow(2);
   };
 
-  const changeRollingBall = () => {
-    const classRollingBall = 'animatedBall';
-    const className = document.getElementById('ball').className;
-    if (className.includes(classRollingBall)) {
-      document.getElementById('ball').className = styles['ball'];
-    } else {
-      document.getElementById('ball').className += ` ${styles[classRollingBall]}`;
-    }
-
-  }
+  const nextFixThrow = () => {
+    setCurrentRound(lastRound);
+    setCurrentThow(lastThow);
+  };
 
   const throwBall = () => {
-    if (!asyncLock) {
-      setAsyncLock(true);
+    if (!rollingBall) {
       rounds[currentRound][currentThow] = new Set(animatedPins);
       setAnimatedPins(new Set());
-      setRounds({ ...(rounds) });
-      changeRollingBall();
+      // TODO: (DISCUSS) When in new first throw of round hit a bowl recorded on second round
+      // Caused inconsistent error:
+      // 1st opt. When throw fixing first error -> clear second error (maybe user doesn't remember 2nd throw)
+      // 2nd opt. When throw fixing first throw with a pin declared in 2nd round show an alert like "Pin X is recorded in 2nd round"
+      // we can detect fix throw now when current round/throw less last but with the logic...
+      setRollingBall(true);
       setTimeout(
         () => {
+          setRounds({ ...(rounds) });
           next();
-          setAsyncLock(false);
-          changeRollingBall();
+          setRollingBall(false);
         },
         1500
       );
@@ -176,32 +189,52 @@ export default function Bowls() {
   };
 
   const checkThrowStyle = (throw_, round) => {
-    return (round < currentRound || throw_ < currentThow) ? styles.throw_ball_off : styles.throw_ball_on;
+    return (round < currentRound || throw_ < currentThow) ? styles.usedBall : '';
   };
 
-  const score = (num) => (
-    <div id={'slide-' + num} className={styles['slides-item']}>
-      <div id={'scoreBox' + num} className={styles.scoreBox}>
-        <div id={'headerBox' + num} className={styles.headerBox}>
-          <div className={styles.throw + ' ' + styles.throw_ball_1 + ' ' + checkThrowStyle(1, num)}></div>
-          <div className={styles.throw + ' ' + styles.throw_ball_2 + ' ' + checkThrowStyle(2, num)}></div>
-          {num}
+  const score = () => (
+    <div className={styles.scoreBox}>
+      <div className={styles.headerBox}>
+        <div className={styles.throw + ' ' + styles.throw_ball_1 + ' ' + checkThrowStyle(1, currentRound)}></div>
+        <div className={styles.throw + ' ' + styles.throw_ball_2 + ' ' + checkThrowStyle(2, currentRound)}></div>
+        {currentRound}
+      </div>
+      <div className={styles.bodyBox}>
+        <div className={styles.rowA}>
+          <div className={styles.columnA}>{showScoreFirstThrow(currentRound)}</div>
+          <div className={styles.columnB}>{showScoreSecondThrow(currentRound)}</div>
         </div>
-        <div id={'bodyBox' + num} className={styles.bodyBox}>
-          <div id={'rowA' + num} className={styles.rowA}>
-            <div id={'columnA' + num} className={styles.columnA}>{showScoreFirstThrow(num)}</div>
-            <div id={'columnB' + num} className={styles.columnB}>{showScoreSecondThrow(num)}</div>
-          </div>
-          <div id={'rowB' + num} className={styles.rowB}>{getScore(num)}</div>
-        </div>
+        <div className={styles.rowB}>{getScore(currentRound)}</div>
       </div>
     </div>
   );
 
+  const changeCurrentRound = (roundNum) => (
+    setCurrentRound(roundNum) && setCurrentThow(1)
+  )
+
+  const scorePinsResume = (roundNum) => (
+    <div className={styles.pinsResume}>
+      {array10.map((item) => <div className={styles.pinResume + ' ' + styles['pinResume' + item]}></div>)}
+    </div>
+  )
+
+  const greenBall = () => (
+    <div className={styles.greenBall}></div>
+  )
+
+  const purpleBall = () => (
+    <div className={styles.purpleBall}></div>
+  )
+
+  // TODO: we need disabled rounds greather than last round
   const scoreNav = (num) => (
-    <div className={styles.carousel__nav_div}>
-      <a className={styles['slider-nav']} href={'#slide-' + num}>{num}</a>
-      <div className={ num < currentRound ? styles.ball_green_off : styles.ball_green_on}></div>
+    <div className={styles.carousel__nav_div} onClick={() => changeCurrentRound(num)}>
+      <div className={styles.carousel__nav_div_sub_div + ' ' + styles.carousel__nav_div_round}>{num}</div>
+      <div className={styles.carousel__nav_div_hr}></div>
+      <div className={styles.carousel__nav_div_sub_div + ' ' + styles.carousel__nav_div_resume}>
+        { (num < lastRound) ? scorePinsResume(num) : (num > lastRound || lastThow == 1) ? greenBall() : purpleBall() }
+      </div>
     </div>
   )
 
@@ -236,18 +269,17 @@ export default function Bowls() {
         <button id="spare" disabled={currentThow != 2} onClick={spare}>SPARE</button>
         <button id="next" onClick={next}>NEXT</button>
       </div>
-      <div className={styles.carousel}>
-        <div className={styles.slides}>
-          {array10.map((item) => score(item))}
-        </div>
-        <div className={styles.carousel__nav}>
-          {array10.map((item) => scoreNav(item))}
-        </div>
+      {score()}
+      <div className={styles.carousel__nav}>
+        {array10.map((item) => scoreNav(item))}
       </div>
       <div id="bowls" className={styles.bowls}>
         {array10.map((item) => bowl(item))}
       </div>
-      <div id="ball" className={styles.ball} onClick={throwBall}>
+      <div id="ball" className={
+        styles.ball + (rollingBall ? ' ' + styles.animatedBall : '') 
+      } onClick={throwBall}>
+        <div className={(currentThow == 1 ? ' ' + styles.greenBall : styles.purpleBall)}></div>
       </div>
     </div>
   );
