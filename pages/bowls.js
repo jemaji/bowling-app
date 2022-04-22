@@ -35,32 +35,26 @@ export default function Bowls() {
     setCurrentRound(1);
     setCurrentThow(1);
     setRounds(getInitialRounds());
-    setRounds(new Set());
+    setAnimatedPins(new Set());
     setRollingBall(false);
   };
 
   const reset = () => initialiceProperties();
 
-  const strike = () => {
-    throwBall();
-    const pinNumbers = array10;
-    pinNumbers.forEach((pinNumber) => {
-      rounds[currentRound][1].add(pinNumber);
-    });
-    setRounds({ ...rounds });
+  const activeAllPins = () => {
+    if (currentThow == 1) {
+      const activatedPins = new Set(array10);
+      setAnimatedPins(activatedPins);
+    } else {
+      const activatedPins = new Set();
+      array10.forEach((pinNumber) => {
+        if (!rounds[currentRound][1].has(pinNumber)) {
+          activatedPins.add(pinNumber);
+        }
+      });
+      setAnimatedPins(activatedPins);
+    }
   };
-
-  const spare = () => {
-    setCurrentThow(2);
-    throwBall();
-    const pinNumbers = array10;
-    pinNumbers.forEach((pinNumber) => {
-      if (!rounds[currentRound][1]?.has(pinNumber)) {
-        rounds[currentRound][2].add(pinNumber);
-      }
-    });
-    setRounds({ ...rounds });
-  }
 
   const next = () => {
     if (currentRound == lastRound && currentThow == lastThow) {
@@ -89,6 +83,7 @@ export default function Bowls() {
   };
 
   const throwBall = () => {
+    console.log(animatedPins);
     if (!rollingBall) {
       rounds[currentRound][currentThow] = new Set(animatedPins);
       setAnimatedPins(new Set());
@@ -223,13 +218,24 @@ export default function Bowls() {
     <div className={styles.greenBall}></div>
   )
 
+  const strikeButton = () => (
+    <div className={styles.spareButton}></div>
+  )
+
+  const spareButton = () => (
+    <div className={styles.spareButton}></div>
+  )
+
   const purpleBall = () => (
     <div className={styles.purpleBall}></div>
   )
 
   // TODO: we need disabled rounds greather than last round
   const scoreNav = (num) => (
-    <div className={styles.carousel__nav_div} onClick={() => changeCurrentRound(num)}>
+    <div
+      className={styles.carousel__nav_div + (num > lastRound ? ' ' + styles.carousel__nav_div_disabled : '')}
+      onClick={() => (num <= lastRound) && changeCurrentRound(num)}
+    >
       <div className={styles.carousel__nav_div_sub_div + ' ' + styles.carousel__nav_div_round}>{num}</div>
       <div className={styles.carousel__nav_div_hr}></div>
       <div className={styles.carousel__nav_div_sub_div + ' ' + styles.carousel__nav_div_resume}>
@@ -263,12 +269,6 @@ export default function Bowls() {
 
   return (
     <div id="container" className={styles.container}>
-      <div id="buttons" className={styles.buttons}>
-        <button id="reset" onClick={reset}>RESET</button>
-        <button id="strike" disabled={currentThow != 1} onClick={strike}>STRIKE</button>
-        <button id="spare" disabled={currentThow != 2} onClick={spare}>SPARE</button>
-        <button id="next" onClick={next}>NEXT</button>
-      </div>
       {score()}
       <div className={styles.carousel__nav}>
         {array10.map((item) => scoreNav(item))}
@@ -276,10 +276,16 @@ export default function Bowls() {
       <div id="bowls" className={styles.bowls}>
         {array10.map((item) => bowl(item))}
       </div>
-      <div id="ball" className={
-        styles.ball + (rollingBall ? ' ' + styles.animatedBall : '') 
-      } onClick={throwBall}>
-        <div className={(currentThow == 1 ? ' ' + styles.greenBall : styles.purpleBall)}></div>
+      <div className={styles.throwSection}>
+        <div className={styles.throwSectionSide}></div>
+        <div id="ball" className={
+          styles.ball + (rollingBall ? ' ' + styles.animatedBall : '') 
+        } onClick={throwBall}>
+          <div className={(currentThow == 1 ? ' ' + styles.greenBall : styles.purpleBall)}></div>
+        </div>
+        <div className={styles.throwSectionSide} onClick={() => {activeAllPins(); throwBall();}}>
+          {currentThow == 1 ? strikeButton() : spareButton()}
+        </div>
       </div>
     </div>
   );
