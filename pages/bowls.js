@@ -1,5 +1,5 @@
 import styles from '../styles/Bowls.module.css';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 
 export default function Bowls() {
 
@@ -42,11 +42,12 @@ export default function Bowls() {
   const reset = () => initialiceProperties();
 
   const activeAllPins = () => {
+    let activatedPins;
     if (currentThow == 1) {
-      const activatedPins = new Set(array10);
+      activatedPins = new Set(array10);
       setAnimatedPins(activatedPins);
     } else {
-      const activatedPins = new Set();
+      activatedPins = new Set();
       array10.forEach((pinNumber) => {
         if (!rounds[currentRound][1].has(pinNumber)) {
           activatedPins.add(pinNumber);
@@ -54,6 +55,13 @@ export default function Bowls() {
       });
       setAnimatedPins(activatedPins);
     }
+    return activatedPins;
+  };
+
+  const deactiveAllPins = () => {
+    let activatedPins = new Set();
+    setAnimatedPins(activatedPins);
+    return activatedPins;
   };
 
   const next = () => {
@@ -82,26 +90,30 @@ export default function Bowls() {
     setCurrentThow(lastThow);
   };
 
-  const throwBall = () => {
-    console.log(animatedPins);
-    if (!rollingBall) {
-      rounds[currentRound][currentThow] = new Set(animatedPins);
-      setAnimatedPins(new Set());
-      // TODO: (DISCUSS) When in new first throw of round hit a bowl recorded on second round
-      // Caused inconsistent error:
-      // 1st opt. When throw fixing first error -> clear second error (maybe user doesn't remember 2nd throw)
-      // 2nd opt. When throw fixing first throw with a pin declared in 2nd round show an alert like "Pin X is recorded in 2nd round"
-      // we can detect fix throw now when current round/throw less last but with the logic...
-      setRollingBall(true);
-      setTimeout(
-        () => {
-          setRounds({ ...(rounds) });
-          next();
-          setRollingBall(false);
-        },
-        1500
-      );
+  const throwBall = ($event) => {
+    if (rollingBall) {
+      return;
     }
+    setRollingBall(true);
+
+    const clickOnStrikeOrSpareButton = [spareButton().props.className, strikeButton().props.className].includes($event.target.className);
+    rounds[currentRound][currentThow] = clickOnStrikeOrSpareButton ? activeAllPins() : animatedPins;
+
+    setAnimatedPins(new Set());
+    // TODO: (DISCUSS) When in new first throw of round hit a bowl recorded on second round
+    // Caused inconsistent error:
+    // 1st opt. When throw fixing first error -> clear second error (maybe user doesn't remember 2nd throw)
+    // 2nd opt. When throw fixing first throw with a pin declared in 2nd round show an alert like "Pin X is recorded in 2nd round"
+    // we can detect fix throw now when current round/throw less last but with the logic...
+    setTimeout(
+      () => {
+        console.log(rounds);
+        setRounds({ ...(rounds) });
+        next();
+        setRollingBall(false);
+      },
+      1500
+    );
   };
 
   const showScoreFirstThrow = (num) => {
@@ -155,8 +167,6 @@ export default function Bowls() {
           roundNumberAcc = Number(roundNumberAcc);
           amount += pinsNumbers.size;
         });
-
-        if (roundNumber == roundNumberAcc) return;
 
         if (isSpare(roundNumberAcc)) {
           amount += rounds[roundNumberAcc + 1][1].size;
@@ -219,7 +229,7 @@ export default function Bowls() {
   )
 
   const strikeButton = () => (
-    <div className={styles.spareButton}></div>
+    <div className={styles.strikeButton}></div>
   )
 
   const spareButton = () => (
@@ -238,11 +248,27 @@ export default function Bowls() {
     >
       <div className={styles.carousel__nav_div_sub_div + ' ' + styles.carousel__nav_div_round}>{num}</div>
       <div className={styles.carousel__nav_div_hr}></div>
+      <div className={styles.carousel__nav_div_sub_div + ' ' + styles.carousel__nav_div_round}>{getScore(num)}</div>
+      <div className={styles.carousel__nav_div_hr}></div>
       <div className={styles.carousel__nav_div_sub_div + ' ' + styles.carousel__nav_div_resume}>
         { (num < lastRound) ? scorePinsResume(num) : (num > lastRound || lastThow == 1) ? greenBall() : purpleBall() }
       </div>
     </div>
   )
+
+  const selectedAllPinImage = () => (
+    <div className={styles.bowl + ' ' + styles.actionForAllPins} onClick={activeAllPins}>
+      <div className={styles.pinTop + ' ' + styles.animatedPin}></div>
+      <div className={styles.pinShawod + ' ' + styles.animatedPinShadow}></div>
+    </div>
+  );
+
+  const unselectedAllPinImage = () => (
+    <div className={styles.bowl + ' ' + styles.actionForAllPins} onClick={deactiveAllPins}>
+      <div className={styles.pinTop}></div>
+      <div className={styles.pinShawod}></div>
+    </div>
+  );
 
   const bowl = (num) => (
     <div
@@ -277,13 +303,16 @@ export default function Bowls() {
         {array10.map((item) => bowl(item))}
       </div>
       <div className={styles.throwSection}>
-        <div className={styles.throwSectionSide}></div>
+        <div className={styles.throwSectionSide + ' ' + styles.throwSectionSideLeft}>
+          {selectedAllPinImage()}
+          {unselectedAllPinImage()}
+        </div>
         <div id="ball" className={
           styles.ball + (rollingBall ? ' ' + styles.animatedBall : '') 
         } onClick={throwBall}>
           <div className={(currentThow == 1 ? ' ' + styles.greenBall : styles.purpleBall)}></div>
         </div>
-        <div className={styles.throwSectionSide} onClick={() => {activeAllPins(); throwBall();}}>
+        <div className={styles.throwSectionSide} onClick={throwBall}>
           {currentThow == 1 ? strikeButton() : spareButton()}
         </div>
       </div>
