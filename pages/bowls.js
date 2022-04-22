@@ -2,8 +2,11 @@ import styles from '../styles/Bowls.module.css';
 import { useState } from 'react';
 
 export default function Bowls() {
+
+  const array10 = Array.from({ length: 10 }, (_, i) => i + 1);
+
   const getInitialRounds = () => {
-    const roundNumbers = Array.from({ length: 10 }, (_, i) => i + 1);
+    const roundNumbers = array10;
     const throwNumbers = Array.from({ length: 2 }, (_, i) => i + 1);
     return roundNumbers.reduce(
       (roundNumberAcc, roundNumberCurr) => {
@@ -33,9 +36,9 @@ export default function Bowls() {
 
   const reset = () => initialiceProperties();
 
-  const strike = (event) => {
+  const strike = () => {
     throwBall();
-    const pinNumbers = Array.from({ length: 10 }, (_, i) => i + 1);
+    const pinNumbers = array10;
     pinNumbers.forEach((pinNumber) => {
       rounds[currentRound][1].add(pinNumber);
     });
@@ -45,7 +48,7 @@ export default function Bowls() {
   const spare = () => {
     setCurrentThow(2);
     throwBall();
-    const pinNumbers = Array.from({ length: 10 }, (_, i) => i + 1);
+    const pinNumbers = array10;
     pinNumbers.forEach((pinNumber) => {
       if (!rounds[currentRound][1]?.has(pinNumber)) {
         rounds[currentRound][2].add(pinNumber);
@@ -172,10 +175,18 @@ export default function Bowls() {
     return round[1].size == 10;
   };
 
+  const checkThrowStyle = (throw_, round) => {
+    return (round < currentRound || throw_ < currentThow) ? styles.throw_ball_off : styles.throw_ball_on;
+  };
+
   const score = (num) => (
     <div id={'slide-' + num} className={styles['slides-item']}>
       <div id={'scoreBox' + num} className={styles.scoreBox}>
-        <div id={'headerBox' + num} className={styles.headerBox}>{num}</div>
+        <div id={'headerBox' + num} className={styles.headerBox}>
+          <div className={styles.throw + ' ' + styles.throw_ball_1 + ' ' + checkThrowStyle(1, num)}></div>
+          <div className={styles.throw + ' ' + styles.throw_ball_2 + ' ' + checkThrowStyle(2, num)}></div>
+          {num}
+        </div>
         <div id={'bodyBox' + num} className={styles.bodyBox}>
           <div id={'rowA' + num} className={styles.rowA}>
             <div id={'columnA' + num} className={styles.columnA}>{showScoreFirstThrow(num)}</div>
@@ -186,6 +197,13 @@ export default function Bowls() {
       </div>
     </div>
   );
+
+  const scoreNav = (num) => (
+    <div className={styles.carousel__nav_div}>
+      <a className={styles['slider-nav']} href={'#slide-' + num}>{num}</a>
+      <div className={ num < currentRound ? styles.ball_green_off : styles.ball_green_on}></div>
+    </div>
+  )
 
   const bowl = (num) => (
     <div
@@ -220,41 +238,14 @@ export default function Bowls() {
       </div>
       <div className={styles.carousel}>
         <div className={styles.slides}>
-          {score(1)}
-          {score(2)}
-          {score(3)}
-          {score(4)}
-          {score(5)}
-          {score(6)}
-          {score(7)}
-          {score(8)}
-          {score(9)}
-          {score(10)}
+          {array10.map((item) => score(item))}
         </div>
         <div className={styles.carousel__nav}>
-          <a className={styles['slider-nav']} href="#slide-1">1</a>
-          <a className={styles['slider-nav']} href="#slide-2">2</a>
-          <a className={styles['slider-nav']} href="#slide-3">3</a>
-          <a className={styles['slider-nav']} href="#slide-4">4</a>
-          <a className={styles['slider-nav']} href="#slide-5">5</a>
-          <a className={styles['slider-nav']} href="#slide-6">6</a>
-          <a className={styles['slider-nav']} href="#slide-7">7</a>
-          <a className={styles['slider-nav']} href="#slide-8">8</a>
-          <a className={styles['slider-nav']} href="#slide-9">9</a>
-          <a className={styles['slider-nav']} href="#slide-10">10</a>
+          {array10.map((item) => scoreNav(item))}
         </div>
       </div>
       <div id="bowls" className={styles.bowls}>
-        {bowl(1)}
-        {bowl(2)}
-        {bowl(3)}
-        {bowl(4)}
-        {bowl(5)}
-        {bowl(6)}
-        {bowl(7)}
-        {bowl(8)}
-        {bowl(9)}
-        {bowl(10)}
+        {array10.map((item) => bowl(item))}
       </div>
       <div id="ball" className={styles.ball} onClick={throwBall}>
       </div>

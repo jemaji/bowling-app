@@ -2,7 +2,7 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  background-image: url('../images/pista.jpeg');
+  background-image: url('../assets/images/pista.jpeg');
   width: 380px;
   height: 900px;
 }
@@ -20,7 +20,7 @@
   overflow: hidden;
   text-align: center;
   width: 100%;
-  height: 150px;
+  height: 160px;
   position: relative;
 }
 
@@ -36,7 +36,7 @@
   border-radius: 10px;
   display: flex;
   flex-shrink: 0;
-  height: 75px;
+  height: 80px;
   justify-content: center;
   margin: 0 1rem;
   position: relative;
@@ -48,7 +48,27 @@
 }
 
 .carousel__nav {
-  padding: 1.25rem .5rem;
+  padding: .5rem;
+  height: 50px;
+}
+
+.carousel__nav_div {
+  display: inline-block;
+  align-items: center;
+}
+
+.ball_green_on {
+  background-size: 100%;
+  width: 35px;
+  padding-top: 70px;
+  background-image: url('../assets/images/ball_on.png');
+}
+
+.ball_green_off {
+  background-size: 100%;
+  width: 35px;
+  padding-top: 70px;
+  background-image: url('../assets/images/ball_off.png');
 }
 
 .slider-nav {
@@ -64,6 +84,7 @@
   text-decoration: none;
   width: 1.5rem;
   margin-left: 5px;
+  justify-content: baseline;
 }
 
 .slider-nav:hover,
@@ -74,13 +95,38 @@
 
 .scoreBox {
   width: 10em;
-  height: 70px;
+  height: 80px;
   border:3px solid grey;
 }
 
 .headerBox {
   border-bottom: 3px solid black;
   text-align: center;
+  height: 28px;
+}
+
+.throw {
+  position: absolute;
+  display: inline-block;
+  background-size: 100%;
+  width: 25px;
+  padding-top:25px;
+}
+
+.throw_ball_on {
+  background-image: url('../assets/images/ball_on.png');
+}
+
+.throw_ball_off {
+  background-image: url('../assets/images/ball_off.png');
+}
+
+.throw_ball_1 {
+  left: 113px;
+}
+
+.throw_ball_2 {
+  left: 140px;
 }
 
 .rowA {
