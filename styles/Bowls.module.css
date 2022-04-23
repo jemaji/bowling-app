@@ -111,6 +111,18 @@
   background-image: url('../assets/images/ball_purple.png');
 }
 
+.ballsToTake {
+  display: flex;
+  width: 100%;
+  justify-content: space-evenly;
+  align-items: center;
+}
+
+.ballsToTake>div {
+  width: 80px;
+  height: 80px;
+}
+
 .throwSection {
   display: flex;
   justify-content: space-between;
