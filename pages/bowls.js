@@ -253,8 +253,8 @@ export default function Bowls() {
     setAnimatedPins(rounds[currentRound][2]);
   }
 
-  const throwIsPreviousToLast = (roundNumber, throwNumber) => {
-    return (roundNumber < lastRound || throwNumber == null || throwNumber < lastRound);
+  const showSelectThrowBall = (roundNumber, throwNumber) => {
+    return currentThrow != throwNumber && (roundNumber < lastRound || throwNumber == null || throwNumber < lastThrow);
   }
 
   const scorePinsResume = (roundNum) => (
@@ -362,8 +362,8 @@ export default function Bowls() {
         </div>
       </div>
       <div className={styles.ballsToTake}>
-        {(currentThrow != 1 && throwIsPreviousToLast(currentRound, 1)) && <div onClick={selectFirstThrow}>{greenBall()}</div>}
-        {(currentThrow != 2 && throwIsPreviousToLast(currentRound, 2)) && <div onClick={selectSecondThrow}>{purpleBall()}</div>}
+        {(showSelectThrowBall(currentRound, 1)) && <div onClick={selectFirstThrow}>{greenBall()}</div>}
+        {(showSelectThrowBall(currentRound, 2)) && <div onClick={selectSecondThrow}>{purpleBall()}</div>}
       </div>
     </div>
   );
