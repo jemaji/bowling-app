@@ -22,9 +22,9 @@ export default function Bowls() {
   };
 
   const [lastRound, setLastRound] = useState(1);
-  const [lastThow, setLastThow] = useState(1);
+  const [lastThrow, setLastThrow] = useState(1);
   const [currentRound, setCurrentRound] = useState(1);
-  const [currentThow, setCurrentThow] = useState(1);
+  const [currentThrow, setCurrentThrow] = useState(1);
   const [rounds, setRounds] = useState(getInitialRounds());
   const [animatedPins, setAnimatedPins] = useState(new Set());
   const [rollingBall, setRollingBall] = useState(false);
@@ -32,9 +32,9 @@ export default function Bowls() {
 
   const initialiceProperties = () => {
     setLastRound(1);
-    setLastThow(1);
+    setLastThrow(1);
     setCurrentRound(1);
-    setCurrentThow(1);
+    setCurrentThrow(1);
     setRounds(getInitialRounds());
     setAnimatedPins(new Set());
     setRollingBall(false);
@@ -45,7 +45,7 @@ export default function Bowls() {
 
   const activeAllPins = () => {
     let activatedPins;
-    if (currentThow == 1) {
+    if (currentThrow == 1) {
       activatedPins = new Set(array10);
       setAnimatedPins(activatedPins);
     } else {
@@ -69,7 +69,7 @@ export default function Bowls() {
   const upAllPins = () => setFootBowling(new Set(array10));
 
   const next = () => {
-    if (currentRound == lastRound && currentThow == lastThow) {
+    if (currentRound == lastRound && currentThrow == lastThrow) {
       return nextLastRound();
     }
 
@@ -78,31 +78,31 @@ export default function Bowls() {
   };
 
   const nextLastRound = () => {
-    if (currentThow == 2 || isStrike(currentRound)) {
+    if (currentThrow == 2 || isStrike(currentRound)) {
       setCurrentRound(currentRound + 1);
-      setCurrentThow(1);
+      setCurrentThrow(1);
       setLastRound(currentRound + 1);
-      setLastThow(1);
+      setLastThrow(1);
       upAllPins();
       return;
     }
-    setCurrentThow(2);
-    setLastThow(2);
+    setCurrentThrow(2);
+    setLastThrow(2);
   };
 
   const nextFixThrow = () => {
     setCurrentRound(lastRound);
-    setCurrentThow(lastThow);
+    setCurrentThrow(lastThrow);
   };
 
   const throwBall = ($event) => {
-    if (rollingBall || currentThow == null) {
+    if (rollingBall || currentThrow == null) {
       return;
     }
     setRollingBall(true);
 
     const clickOnStrikeOrSpareButton = [spareButton().props.className, strikeButton().props.className].includes($event.target.className);
-    rounds[currentRound][currentThow] = clickOnStrikeOrSpareButton ? activeAllPins() : animatedPins;
+    rounds[currentRound][currentThrow] = clickOnStrikeOrSpareButton ? activeAllPins() : animatedPins;
 
     setFootBowling(new Set([...footBowling].filter(pingNumber => !animatedPins.has(pingNumber))));
     setAnimatedPins(new Set());
@@ -200,7 +200,7 @@ export default function Bowls() {
   };
 
   const checkThrowStyle = (throw_, round) => {
-    return (round < currentRound || throw_ < currentThow) ? styles.usedBall : '';
+    return (round < currentRound || throw_ < currentThrow) ? styles.usedBall : '';
   };
 
   const score = () => (
@@ -226,15 +226,15 @@ export default function Bowls() {
     }
     setAnimatedPins(new Set());
     setCurrentRound(roundNum);
-    setCurrentThow(null);
+    setCurrentThrow(null);
     upAllPins();
   }
 
   const changeCurrentRoundToLastRound = () => {
     setAnimatedPins(new Set());
     setCurrentRound(lastRound);
-    setCurrentThow(lastThow);
-    if (lastThow == 1) {
+    setCurrentThrow(lastThrow);
+    if (lastThrow == 1) {
       upAllPins();
     } else {
       setFootBowling(new Set([...array10].filter(pingNumber => !rounds[lastRound][1].has(pingNumber))));
@@ -242,13 +242,13 @@ export default function Bowls() {
   }
 
   const selectFirstThrow = () => {
-    setCurrentThow(1);
+    setCurrentThrow(1);
     upAllPins();
     setAnimatedPins(rounds[currentRound][1]);
   }
 
   const selectSecondThrow = () => {
-    setCurrentThow(2);
+    setCurrentThrow(2);
     setFootBowling(new Set([...array10].filter(pingNumber => !rounds[currentRound][1].has(pingNumber))));
     setAnimatedPins(rounds[currentRound][2]);
   }
@@ -294,7 +294,7 @@ export default function Bowls() {
       <div className={styles.carousel__nav_div_sub_div + ' ' + styles.carousel__nav_div_round}>{getScore(num)}</div>
       <div className={styles.carousel__nav_div_hr}></div>
       <div className={styles.carousel__nav_div_sub_div + ' ' + styles.carousel__nav_div_resume}>
-        { (num < lastRound) ? scorePinsResume(num) : (num > lastRound || lastThow == 1) ? greenBall() : purpleBall() }
+        { (num < lastRound) ? scorePinsResume(num) : (num > lastRound || lastThrow == 1) ? greenBall() : purpleBall() }
       </div>
     </div>
   )
@@ -353,17 +353,17 @@ export default function Bowls() {
         <div id="ball" className={
           styles.ball + (rollingBall ? ' ' + styles.animatedBall : '') 
         } onClick={throwBall}>
-          {currentThow == 1 && greenBall()}
-          {currentThow == 2 && purpleBall()}
-          {currentThow == 3 && yellowBall()}
+          {currentThrow == 1 && greenBall()}
+          {currentThrow == 2 && purpleBall()}
+          {currentThrow == 3 && yellowBall()}
         </div>
         <div className={styles.throwSectionSide} onClick={throwBall}>
-          {currentThow == 1 ? strikeButton() : spareButton()}
+          {currentThrow == 1 ? strikeButton() : spareButton()}
         </div>
       </div>
       <div className={styles.ballsToTake}>
-        {(currentThow != 1 && throwIsPreviousToLast(currentRound, 1)) && <div onClick={selectFirstThrow}>{greenBall()}</div>}
-        {(currentThow != 2 && throwIsPreviousToLast(currentRound, 2)) && <div onClick={selectSecondThrow}>{purpleBall()}</div>}
+        {(currentThrow != 1 && throwIsPreviousToLast(currentRound, 1)) && <div onClick={selectFirstThrow}>{greenBall()}</div>}
+        {(currentThrow != 2 && throwIsPreviousToLast(currentRound, 2)) && <div onClick={selectSecondThrow}>{purpleBall()}</div>}
       </div>
     </div>
   );
