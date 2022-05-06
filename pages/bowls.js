@@ -101,6 +101,12 @@ export default function Bowls() {
     }
     setRollingBall(true);
 
+    const strike = strikeButton().props.className === $event.target.className;
+
+    if (strike) {
+      rounds[currentRound][currentThrow + 1] = new Set();;
+    }
+
     const clickOnStrikeOrSpareButton = [spareButton().props.className, strikeButton().props.className].includes($event.target.className);
     rounds[currentRound][currentThrow] = clickOnStrikeOrSpareButton ? activeAllPins() : animatedPins;
 
