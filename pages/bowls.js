@@ -259,9 +259,19 @@ export default function Bowls() {
 
   const scorePinsResume = (roundNum) => (
     <div className={styles.pinsResume}>
-      {array10.map((item) => <div className={styles.pinResume + ' ' + styles['pinResume' + item]}></div>)}
+      {array10.map((item) => <div className={styles.pinResume + ' ' + styles['pinResume' + item] + ' ' + controlColorPinResume(roundNum, item)}></div>)}
     </div>
   )
+
+  const controlColorPinResume = (roundNum, item) => {
+    let resultStyle = '';
+    if (rounds[roundNum][1] && rounds[roundNum][1].has(item)) {
+      resultStyle = styles.pinResumeGreen;
+    } else if (rounds[roundNum][2] && rounds[roundNum][2].has(item)) {
+      resultStyle = styles.pinResumePurple;
+    }
+    return resultStyle;
+  } 
 
   const greenBall = () => (
     <div className={styles.greenBall}></div>
@@ -293,7 +303,7 @@ export default function Bowls() {
       <div className={styles.carousel__nav_div_hr}></div>
       <div className={styles.carousel__nav_div_sub_div + ' ' + styles.carousel__nav_div_round}>{getScore(num)}</div>
       <div className={styles.carousel__nav_div_hr}></div>
-      <div className={styles.carousel__nav_div_sub_div + ' ' + styles.carousel__nav_div_resume}>
+      <div className={styles.carousel__nav_div_sub_div}>
         { (num < lastRound) ? scorePinsResume(num) : (num > lastRound || lastThrow == 1) ? greenBall() : purpleBall() }
       </div>
     </div>
