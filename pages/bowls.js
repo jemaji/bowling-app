@@ -104,14 +104,13 @@ export default function Bowls() {
     const strike = strikeButton().props.className === $event.target.className;
 
     if (strike) {
-      rounds[currentRound][currentThrow + 1] = new Set();;
+      rounds[currentRound][currentThrow + 1] = new Set();
     }
 
     const clickOnStrikeOrSpareButton = [spareButton().props.className, strikeButton().props.className].includes($event.target.className);
     rounds[currentRound][currentThrow] = clickOnStrikeOrSpareButton ? activeAllPins() : animatedPins;
 
-    setFootBowling(new Set([...footBowling].filter(pingNumber => !animatedPins.has(pingNumber))));
-    setAnimatedPins(new Set());
+    setFootBowling(new Set([...footBowling].filter(pingNumber => !rounds[currentRound][currentThrow].has(pingNumber))));
     setRounds({ ...(rounds) });
 
     // TODO: (DISCUSS) When in new first throw of round hit a bowl recorded on second round
@@ -123,6 +122,7 @@ export default function Bowls() {
       () => {
         next();
         setRollingBall(false);
+        setAnimatedPins(new Set());
       },
       1500
     );
