@@ -236,6 +236,10 @@
   color: #fff;
 }
 
+.currentBorder {
+  border: 3px solid black;
+}
+
 .scoreBox {
   margin-top: 7px;
   width: 10em;

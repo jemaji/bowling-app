@@ -302,7 +302,7 @@ export default function Bowls() {
   // TODO: we need disabled rounds greather than last round
   const scoreNav = (num) => (
     <div
-      className={styles.carousel__nav_div + (num > lastRound ? ' ' + styles.carousel__nav_div_disabled : '')}
+      className={(currentRound === num? styles.currentBorder + ' ':'') +  styles.carousel__nav_div + (num > lastRound ? ' ' + styles.carousel__nav_div_disabled : '')}
       onClick={() => (num <= lastRound) && changeCurrentRound(num)}
     >
       <div className={styles.carousel__nav_div_sub_div + ' ' + styles.carousel__nav_div_round}>{num}</div>
