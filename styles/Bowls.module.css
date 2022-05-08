@@ -303,6 +303,7 @@
   margin-bottom: 20px;
   left: -11px; /* Middle of ping width */
   position: relative;
+  margin-left: 50%;
 }
 
 .bowl {

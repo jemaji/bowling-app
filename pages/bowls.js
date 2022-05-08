@@ -6,7 +6,7 @@ export default function Bowls() {
   const array10 = Array.from({ length: 10 }, (_, i) => i + 1);
 
   const getInitialRounds = () => {
-    const roundNumbers = array10;
+    const roundNumbers = [ ...array10, 11, 12, 13];
     const throwNumbers = Array.from({ length: 2 }, (_, i) => i + 1);
     return roundNumbers.reduce(
       (roundNumberAcc, roundNumberCurr) => {
@@ -132,6 +132,9 @@ export default function Bowls() {
     const amount = rounds[num][1].size;
 
     if (amount == 10) {
+      if (num === 10) {
+        return 'X'
+      }
       return '';
     }
 
@@ -143,6 +146,10 @@ export default function Bowls() {
   };
 
   const showScoreSecondThrow = (num) => {
+    if (num === 10) {
+      return showScoreFirstThrow(num);
+    }
+
     if (rounds[num][1].size == 10) {
       return 'X';
     }
@@ -214,17 +221,34 @@ export default function Bowls() {
       <div className={styles.headerBox}>
         <div className={styles.throw + ' ' + styles.throw_ball_1 + ' ' + checkThrowStyle(1, currentRound)}></div>
         <div className={styles.throw + ' ' + styles.throw_ball_2 + ' ' + checkThrowStyle(2, currentRound)}></div>
-        {currentRound}
+        {currentRound>=10 ? 10 : currentRound}
       </div>
       <div className={styles.bodyBox}>
         <div className={styles.rowA}>
-          <div className={styles.columnA}>{showScoreFirstThrow(currentRound)}</div>
-          <div className={styles.columnB}>{showScoreSecondThrow(currentRound)}</div>
+          <div style={{width: currentRound >= 10 ? '33%' : ''}} className={styles.columnA}>{showScoreFirstThrow(currentRound >= 10 ? 10 : currentRound)}</div>
+          <div style={{width: currentRound >= 10 ? '33%' : ''}} className={styles.columnB}>{showScoreSecondThrow(currentRound >= 10 ? 10 : currentRound)}</div>
+          <div style={{display: currentRound >= 10 ? '' : 'none', width: currentRound >= 10 ? '33%' : ''}} className={styles.columnB}>{showScoreSecondThrow(currentRound >= 10 ? 10 : currentRound)}</div>
         </div>
-        <div className={styles.rowB}>{getScore(currentRound)}</div>
+        <div className={styles.rowB}>{getScore(currentRound>=10 ? 10 : currentRound)}</div>
       </div>
     </div>
   );
+
+  const hasRound11 = () => {
+    return isSpare(10) || isStrike(10);
+  }
+
+  const hasRound12 = () => {
+    return hasRound11() && isStrike(11);
+  }
+
+  const isGameFinished = () => {
+    return (currentRound === 11 && !hasRound11()) 
+      || (currentRound === 11 && currentThrow === 2 && isSpare(10))
+      || (currentRound === 12 && !hasRound12()) 
+      || (currentRound === 12 && currentThrow === 2) 
+      || (currentRound === 13)
+  }
 
   const changeCurrentRound = (roundNum) => {
     if (roundNum == lastRound) {
@@ -352,16 +376,12 @@ export default function Bowls() {
     </div>
   );
 
-  return (
-    <div id="container" className={styles.container}>
-      {score()}
-      <div className={styles.carousel__nav}>
-        {array10.map((item) => scoreNav(item))}
-      </div>
+  const containerBowling = () => (
+    <div>
       <div id="bowls" className={styles.bowls}>
         {array10.map((item) => bowl(item))}
       </div>
-      <div className={styles.throwSection}>
+      <div style={{display: currentThrow ? '' : 'none'}} className={styles.throwSection}>
         <div className={styles.throwSectionSide + ' ' + styles.throwSectionSideLeft}>
           {selectedAllPinImage()}
           {unselectedAllPinImage()}
@@ -381,6 +401,16 @@ export default function Bowls() {
         {(showSelectThrowBall(currentRound, 1)) && <div onClick={selectFirstThrow}>{greenBall()}</div>}
         {(showSelectThrowBall(currentRound, 2)) && <div onClick={selectSecondThrow}>{purpleBall()}</div>}
       </div>
+    </div>
+  );
+
+  return (
+    <div id="container" className={styles.container}>
+      {score()}
+      <div className={styles.carousel__nav}>
+        {array10.map((item) => scoreNav(item))}
+      </div>
+      {isGameFinished() ? '' : containerBowling()}
     </div>
   );
 }
