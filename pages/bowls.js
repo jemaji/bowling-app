@@ -91,6 +91,17 @@ export default function Bowls() {
   };
 
   const nextFixThrow = () => {
+    if (currentRound === 10 && currentThrow === 1) {
+      rounds[11][1] = new Set();
+      rounds[12][1] = new Set();
+      setRounds(rounds);
+    }
+    if (currentThrow === 1 && !isStrike(currentRound)) {
+      setCurrentRound(currentRound);
+      setCurrentThrow(2);
+      setFootBowling(new Set([...array10].filter(pingNumber => !rounds[currentRound][1].has(pingNumber))));
+      return;
+    }
     setCurrentRound(lastRound);
     setCurrentThrow(lastThrow);
     setFootBowling(new Set([...array10].filter(pingNumber => !rounds[lastRound][1].has(pingNumber))));
@@ -133,7 +144,7 @@ export default function Bowls() {
     const amount = rounds[num][1].size;
 
     if (amount == 10) {
-      if (num === 10) {
+      if (num >= 10) {
         return 'X'
       }
       return '';
@@ -147,8 +158,8 @@ export default function Bowls() {
   };
 
   const showScoreSecondThrow = (num) => {
-    if (num === 10) {
-      return showScoreFirstThrow(num);
+    if (num === 10 && isStrike(10)) {
+      return showScoreSecondThrow(11);
     }
 
     if (rounds[num][1].size == 10) {
@@ -166,6 +177,23 @@ export default function Bowls() {
     }
 
     return amount;
+  };
+
+  const showScoreThirdThrow = (num) => {
+    if (num === 10) {
+      if (isStrike(10) && !isStrike(11)) {
+        return showScoreSecondThrow(11);
+      } 
+
+      if (isStrike(11)) {
+        return showScoreFirstThrow(12);
+      }
+  
+      if (isSpare(10)) {
+        return showScoreFirstThrow(11);
+      }
+    }
+    return '-';
   };
 
   const changePinActivation = (num) => {
@@ -228,7 +256,7 @@ export default function Bowls() {
         <div className={styles.rowA}>
           <div style={{width: currentRound >= 10 ? '33%' : ''}} className={styles.columnA}>{showScoreFirstThrow(currentRound >= 10 ? 10 : currentRound)}</div>
           <div style={{width: currentRound >= 10 ? '33%' : ''}} className={styles.columnB}>{showScoreSecondThrow(currentRound >= 10 ? 10 : currentRound)}</div>
-          <div style={{display: currentRound >= 10 ? '' : 'none', width: currentRound >= 10 ? '33%' : ''}} className={styles.columnB}>{showScoreSecondThrow(currentRound >= 10 ? 10 : currentRound)}</div>
+          <div style={{display: currentRound >= 10 ? '' : 'none', width: currentRound >= 10 ? '33%' : ''}} className={styles.columnB}>{showScoreThirdThrow(currentRound >= 10 ? 10 : currentRound)}</div>
         </div>
         <div className={styles.rowB}>{getScore(currentRound>=10 ? 10 : currentRound)}</div>
       </div>
@@ -279,9 +307,19 @@ export default function Bowls() {
   }
 
   const selectSecondThrow = () => {
+    if (currentRound === 10 && isStrike(10)) {
+      setCurrentRound(11);
+      setCurrentThrow(1);
+      setFootBowling(new Set([...array10].filter(pingNumber => !rounds[11][1].has(pingNumber))));
+      setAnimatedPins(rounds[11][1]);
+    }
     setCurrentThrow(2);
     setFootBowling(new Set([...array10].filter(pingNumber => !rounds[currentRound][1].has(pingNumber))));
     setAnimatedPins(rounds[currentRound][2]);
+  }
+
+  const selectThirdThrow = () => {
+
   }
 
   const showSelectThrowBall = (roundNumber, throwNumber) => {
@@ -313,7 +351,7 @@ export default function Bowls() {
   )
 
   const yellowBall = () => (
-    <div className={styles.purpleBall}></div>
+    <div className={styles.yellowBall}></div>
   )
 
   const strikeButton = () => (
@@ -324,10 +362,9 @@ export default function Bowls() {
     <div className={styles.spareButton}></div>
   )
 
-  // TODO: we need disabled rounds greather than last round
   const scoreNav = (num) => (
     <div
-      className={(currentRound === num? styles.currentBorder + ' ':'') +  styles.carousel__nav_div + (num > lastRound ? ' ' + styles.carousel__nav_div_disabled : '')}
+      className={(currentRound === num || (currentRound >= 10 && num === 10 && lastRound > 10)? styles.currentBorder + ' ':'') +  styles.carousel__nav_div + (num > lastRound ? ' ' + styles.carousel__nav_div_disabled : '')}
       onClick={() => (num <= lastRound) && changeCurrentRound(num)}
     >
       <div className={styles.carousel__nav_div_sub_div + ' ' + styles.carousel__nav_div_round}>{num}</div>
@@ -401,6 +438,7 @@ export default function Bowls() {
       <div className={styles.ballsToTake}>
         {(showSelectThrowBall(currentRound, 1)) && <div onClick={selectFirstThrow}>{greenBall()}</div>}
         {(showSelectThrowBall(currentRound, 2)) && <div onClick={selectSecondThrow}>{purpleBall()}</div>}
+        {currentRound === 10 && (hasRound11() || hasRound12()) ? (<div onClick={selectThirdThrow}>{yellowBall()}</div>) : ''}
       </div>
     </div>
   );
