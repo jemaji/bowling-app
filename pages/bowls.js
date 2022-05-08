@@ -70,41 +70,33 @@ export default function Bowls() {
 
   const next = () => {
     if (currentRound == lastRound && currentThrow == lastThrow) {
-      return nextLastRound();
+      updateLastRound();
     }
 
-    // if the throw is a fix go to last round
-    return nextFixThrow();
+    return nextLastRound();
   };
 
   const nextLastRound = () => {
     if (currentThrow == 2 || isStrike(currentRound)) {
       setCurrentRound(currentRound + 1);
       setCurrentThrow(1);
-      setLastRound(currentRound + 1);
-      setLastThrow(1);
       upAllPins();
+      if (currentThrow == 1) {
+        rounds[currentRound][2] = new Set();
+      }
       return;
     }
+
     setCurrentThrow(2);
-    setLastThrow(2);
   };
 
-  const nextFixThrow = () => {
-    if (currentRound === 10 && currentThrow === 1) {
-      rounds[11][1] = new Set();
-      rounds[12][1] = new Set();
-      setRounds(rounds);
-    }
-    if (currentThrow === 1 && !isStrike(currentRound)) {
-      setCurrentRound(currentRound);
-      setCurrentThrow(2);
-      setFootBowling(new Set([...array10].filter(pingNumber => !rounds[currentRound][1].has(pingNumber))));
+  const updateLastRound = () => {
+    if (currentThrow == 2 || isStrike(currentRound)) {
+      setLastRound(currentRound + 1);
+      setLastThrow(1);
       return;
     }
-    setCurrentRound(lastRound);
-    setCurrentThrow(lastThrow);
-    setFootBowling(new Set([...array10].filter(pingNumber => !rounds[lastRound][1].has(pingNumber))));
+    setLastThrow(2);
   };
 
   const throwBall = ($event) => {
@@ -199,10 +191,8 @@ export default function Bowls() {
   const changePinActivation = (num) => {
     if (animatedPins.size == animatedPins.add(num).size) {
       animatedPins.delete(num);
-      setAnimatedPins(new Set(animatedPins));
-    } else {
-      setAnimatedPins(new Set(animatedPins));
     }
+    setAnimatedPins(new Set(animatedPins));
   };
 
   const getScore = (roundNumber) => {
@@ -280,9 +270,21 @@ export default function Bowls() {
   }
 
   const changeCurrentRound = (roundNum) => {
+    console.log(roundNum);
+    if (roundNum === 10) {
+      rounds[11][1] = new Set();
+      rounds[11][2] = new Set();
+      rounds[12][1] = new Set();
+      setLastRound(10);
+      setLastThrow(isStrike(10) ? 1 : 2);
+      setRounds({ ...(rounds) });
+      return changeCurrentRoundToLastRound();
+    }
+
     if (roundNum == lastRound) {
       return changeCurrentRoundToLastRound();
     }
+    console.log(rounds[9][2])
     setAnimatedPins(new Set());
     setCurrentRound(roundNum);
     setCurrentThrow(null);
@@ -323,7 +325,16 @@ export default function Bowls() {
   }
 
   const showSelectThrowBall = (roundNumber, throwNumber) => {
-    return currentThrow != throwNumber && (roundNumber < lastRound || throwNumber == null || throwNumber < lastThrow);
+    return currentThrow != throwNumber
+      && (
+        roundNumber <= lastRound
+        || throwNumber == null
+        || throwNumber < lastThrow
+      )
+      && (
+        throwNumber != 2
+        || !isStrike(roundNumber)
+      );
   }
 
   const scorePinsResume = (roundNum) => (
@@ -427,9 +438,9 @@ export default function Bowls() {
         <div id="ball" className={
           styles.ball + (rollingBall ? ' ' + styles.animatedBall : '') 
         } onClick={throwBall}>
-          {currentThrow == 1 && greenBall()}
-          {currentThrow == 2 && purpleBall()}
-          {currentThrow == 3 && yellowBall()}
+          {currentThrow == 1 && currentRound <= 10 && greenBall()}
+          {(currentThrow == 2 && currentRound != 11 || currentThrow == 1 && currentRound == 11 && isStrike(10)) && purpleBall()}
+          {(currentRound == 12 || (currentRound == 11 && (currentThrow == 2 || isSpare(10)))) && yellowBall()}
         </div>
         <div className={styles.throwSectionSide} onClick={throwBall}>
           {currentThrow == 1 ? strikeButton() : spareButton()}
@@ -438,7 +449,6 @@ export default function Bowls() {
       <div className={styles.ballsToTake}>
         {(showSelectThrowBall(currentRound, 1)) && <div onClick={selectFirstThrow}>{greenBall()}</div>}
         {(showSelectThrowBall(currentRound, 2)) && <div onClick={selectSecondThrow}>{purpleBall()}</div>}
-        {currentRound === 10 && (hasRound11() || hasRound12()) ? (<div onClick={selectThirdThrow}>{yellowBall()}</div>) : ''}
       </div>
     </div>
   );
