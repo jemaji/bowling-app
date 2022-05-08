@@ -93,6 +93,7 @@ export default function Bowls() {
   const nextFixThrow = () => {
     setCurrentRound(lastRound);
     setCurrentThrow(lastThrow);
+    setFootBowling(new Set([...array10].filter(pingNumber => !rounds[lastRound][1].has(pingNumber))));
   };
 
   const throwBall = ($event) => {
