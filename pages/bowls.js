@@ -410,7 +410,7 @@ export default function Bowls() {
   );
 
   const scoreNavStrike12 = (num) => (
-    <div style={{display: num === 10 && isStrike(11) && !isGameFinished() ? 'block' : 'none'}}
+    <div style={{display: num === 10 && isStrike(11) && !isSpare(10) ? 'block' : 'none'}}
         className={(currentRound === num || (currentRound >= 10 && num === 10 && lastRound > 10) ? 
           styles.currentBorder + ' ':'') +  styles.carousel__nav_div + (num > lastRound ? ' ' + styles.carousel__nav_div_disabled : '')}>
       <div  className={styles.carousel__nav_div_sub_div}>
