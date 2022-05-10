@@ -62,6 +62,13 @@
   justify-content: space-around;
 }
 
+.carousel__nav1112 {
+  display: flex;
+  width: 100%;
+  margin-top: 7px;
+  justify-content: end;
+}
+
 .carousel__nav_div {
   display: flex;
   flex-direction: column;
@@ -187,6 +194,11 @@
 .pinResumePurple {
   border-color: purple;
   background-color: purple;
+}
+
+.pinResumeYellow {
+  border-color: #ffcc00;
+  background-color: #ffcc00;
 }
 
 .pinResume1 {

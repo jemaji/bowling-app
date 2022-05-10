@@ -173,6 +173,10 @@ export default function Bowls() {
 
   const showScoreThirdThrow = (num) => {
     if (num === 10) {
+      if (isSpare(10) && isStrike(11)) {
+        return showScoreFirstThrow(11);
+      }
+
       if (isStrike(10) && !isStrike(11)) {
         return showScoreSecondThrow(11);
       } 
@@ -258,7 +262,7 @@ export default function Bowls() {
   }
 
   const hasRound12 = () => {
-    return hasRound11() && isStrike(11);
+    return hasRound11() && isStrike(11) && !isSpare(10);
   }
 
   const isGameFinished = () => {
@@ -272,6 +276,7 @@ export default function Bowls() {
   const changeCurrentRound = (roundNum) => {
     console.log(roundNum);
     if (roundNum === 10) {
+      rounds[10][2] = new Set();
       rounds[11][1] = new Set();
       rounds[11][2] = new Set();
       rounds[12][1] = new Set();
@@ -320,10 +325,6 @@ export default function Bowls() {
     setAnimatedPins(rounds[currentRound][2]);
   }
 
-  const selectThirdThrow = () => {
-
-  }
-
   const showSelectThrowBall = (roundNumber, throwNumber) => {
     return currentThrow != throwNumber
       && (
@@ -345,7 +346,13 @@ export default function Bowls() {
 
   const controlColorPinResume = (roundNum, item) => {
     let resultStyle = '';
-    if (rounds[roundNum][1] && rounds[roundNum][1].has(item)) {
+    if (roundNum === 12 && (rounds[roundNum][1] && rounds[roundNum][1].has(item))) {
+      resultStyle = styles.pinResumeYellow;
+    } else if (roundNum === 11 && isStrike(10) && (rounds[roundNum][1] && rounds[roundNum][1].has(item))) {
+      resultStyle = styles.pinResumePurple;
+    } else if (roundNum === 11 && isSpare(10) && rounds[roundNum][1] && rounds[roundNum][1].has(item)) {
+      resultStyle = styles.pinResumeYellow;
+    } else if (rounds[roundNum][1] && rounds[roundNum][1].has(item)) {
       resultStyle = styles.pinResumeGreen;
     } else if (rounds[roundNum][2] && rounds[roundNum][2].has(item)) {
       resultStyle = styles.pinResumePurple;
@@ -353,6 +360,10 @@ export default function Bowls() {
     return resultStyle;
   } 
 
+  const colorBall = (color) => (
+    <div className={styles[`${color}Ball`]}></div>
+  )
+  
   const greenBall = () => (
     <div className={styles.greenBall}></div>
   )
@@ -387,6 +398,26 @@ export default function Bowls() {
       </div>
     </div>
   )
+
+  const scoreNavStrike11 = (num) => (
+    <div style={{display: num === 10 && (isStrike(10) || isSpare(10)) ? 'block' : 'none'}}
+        className={(currentRound === num || (currentRound >= 10 && num === 10 && lastRound > 10)? 
+          styles.currentBorder + ' ':'') +  styles.carousel__nav_div + (num > lastRound ? ' ' + styles.carousel__nav_div_disabled : '')}>
+      <div  className={styles.carousel__nav_div_sub_div}>
+          { (num < lastRound) ? scorePinsResume(11) : (num > lastRound || lastThrow == 1) ? purpleBall() : yellowBall() }
+      </div>
+    </div>
+  );
+
+  const scoreNavStrike12 = (num) => (
+    <div style={{display: num === 10 && isStrike(11) && !isGameFinished() ? 'block' : 'none'}}
+        className={(currentRound === num || (currentRound >= 10 && num === 10 && lastRound > 10) ? 
+          styles.currentBorder + ' ':'') +  styles.carousel__nav_div + (num > lastRound ? ' ' + styles.carousel__nav_div_disabled : '')}>
+      <div  className={styles.carousel__nav_div_sub_div}>
+          { (num < lastRound) ? scorePinsResume(12) : (num > lastRound || lastThrow == 1) ? yellowBall() : '' }
+      </div>
+    </div>
+  );
 
   const selectedAllPinImage = () => (
     <div className={styles.bowl + ' ' + styles.actionForAllPins} onClick={activeAllPins}>
@@ -426,7 +457,7 @@ export default function Bowls() {
   );
 
   const containerBowling = () => (
-    <div>
+    <div style={{marginTop: isStrike(11) ? '-80px' : (isStrike(10) || isSpare(10)) ? '-40px' : ''}}>
       <div id="bowls" className={styles.bowls}>
         {array10.map((item) => bowl(item))}
       </div>
@@ -458,6 +489,12 @@ export default function Bowls() {
       {score()}
       <div className={styles.carousel__nav}>
         {array10.map((item) => scoreNav(item))}
+      </div>
+      <div className={styles.carousel__nav1112}>
+        {array10.map((item) => scoreNavStrike11(item))}
+      </div>
+      <div className={styles.carousel__nav1112}>
+        {array10.map((item) => scoreNavStrike12(item))}
       </div>
       {isGameFinished() ? '' : containerBowling()}
     </div>
