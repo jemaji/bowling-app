@@ -99,6 +99,15 @@ export default function Bowls() {
     setLastThrow(2);
   };
 
+  const reset1112 = () => {
+    if (currentRound === 10) {
+      rounds[11][1] = new Set();
+      rounds[11][2] = new Set();
+      rounds[12][1] = new Set();
+    }
+    setLastRound(11);
+  }
+
   const throwBall = ($event) => {
     if (rollingBall || currentThrow == null) {
       return;
@@ -106,13 +115,17 @@ export default function Bowls() {
     setRollingBall(true);
 
     const strike = strikeButton().props.className === $event.target.className;
+    const spare = spareButton().props.className === $event.target.className;
 
     if (strike) {
       rounds[currentRound][currentThrow + 1] = new Set();
+      reset1112();
+    } else if (spare) {
+      reset1112();
     }
 
-    const clickOnStrikeOrSpareButton = [spareButton().props.className, strikeButton().props.className].includes($event.target.className);
-    rounds[currentRound][currentThrow] = clickOnStrikeOrSpareButton ? activeAllPins() : animatedPins;
+    // const clickOnStrikeOrSpareButton = [spareButton().props.className, strikeButton().props.className].includes($event.target.className);
+    rounds[currentRound][currentThrow] = strike || spare ? activeAllPins() : animatedPins;
 
     setFootBowling(new Set([...footBowling].filter(pingNumber => !rounds[currentRound][currentThrow].has(pingNumber))));
     setRounds({ ...(rounds) });
@@ -151,7 +164,7 @@ export default function Bowls() {
 
   const showScoreSecondThrow = (num) => {
     if (num === 10 && isStrike(10)) {
-      return showScoreSecondThrow(11);
+      return showScoreFirstThrow(11);
     }
 
     if (rounds[num][1].size == 10) {
@@ -193,10 +206,11 @@ export default function Bowls() {
   };
 
   const changePinActivation = (num) => {
-    if (animatedPins.size == animatedPins.add(num).size) {
-      animatedPins.delete(num);
+    const activatedPins = new Set(animatedPins);
+    if (activatedPins.size == activatedPins.add(num).size) {
+      activatedPins.delete(num);
     }
-    setAnimatedPins(new Set(animatedPins));
+    setAnimatedPins(new Set(activatedPins));
   };
 
   const getScore = (roundNumber) => {
@@ -275,16 +289,6 @@ export default function Bowls() {
 
   const changeCurrentRound = (roundNum) => {
     console.log(roundNum);
-    if (roundNum === 10) {
-      rounds[10][2] = new Set();
-      rounds[11][1] = new Set();
-      rounds[11][2] = new Set();
-      rounds[12][1] = new Set();
-      setLastRound(10);
-      setLastThrow(isStrike(10) ? 1 : 2);
-      setRounds({ ...(rounds) });
-      return changeCurrentRoundToLastRound();
-    }
 
     if (roundNum == lastRound) {
       return changeCurrentRoundToLastRound();
@@ -323,6 +327,15 @@ export default function Bowls() {
     setCurrentThrow(2);
     setFootBowling(new Set([...array10].filter(pingNumber => !rounds[currentRound][1].has(pingNumber))));
     setAnimatedPins(rounds[currentRound][2]);
+  }
+
+  const selectThirdThrow = () => {
+    if ((isStrike(10) && isStrike(11))) {
+      setCurrentRound(12);
+      setCurrentThrow(1);
+      setFootBowling(new Set([...array10].filter(pingNumber => !rounds[currentRound][1].has(pingNumber))));
+      setAnimatedPins(rounds[currentRound][1]);
+    }
   }
 
   const showSelectThrowBall = (roundNumber, throwNumber) => {
@@ -386,7 +399,8 @@ export default function Bowls() {
 
   const scoreNav = (num) => (
     <div
-      className={(currentRound === num || (currentRound >= 10 && num === 10 && lastRound > 10)? styles.currentBorder + ' ':'') +  styles.carousel__nav_div + (num > lastRound ? ' ' + styles.carousel__nav_div_disabled : '')}
+      className={(currentRound === num || (currentRound >= 10 && num === 10 && lastRound > 10)? styles.currentBorder + ' ':'') + 
+      styles.carousel__nav_div + (num > lastRound ? ' ' + styles.carousel__nav_div_disabled : '')}
       onClick={() => (num <= lastRound) && changeCurrentRound(num)}
     >
       <div className={styles.carousel__nav_div_sub_div + ' ' + styles.carousel__nav_div_round}>{num}</div>
@@ -399,20 +413,22 @@ export default function Bowls() {
     </div>
   )
 
-  const scoreNavStrike11 = (num) => (
+  const scoreNavStrikeSpare10 = (num) => (
     <div style={{display: num === 10 && (isStrike(10) || isSpare(10)) ? 'block' : 'none'}}
         className={(currentRound === num || (currentRound >= 10 && num === 10 && lastRound > 10)? 
-          styles.currentBorder + ' ':'') +  styles.carousel__nav_div + (num > lastRound ? ' ' + styles.carousel__nav_div_disabled : '')}>
+          styles.currentBorder + ' ':'') +  styles.carousel__nav_div + (num > lastRound ? ' ' + styles.carousel__nav_div_disabled : '')}
+          onClick={() => (num <= lastRound) && changeCurrentRound(10)}>
       <div  className={styles.carousel__nav_div_sub_div}>
           { (num < lastRound) ? scorePinsResume(11) : (num > lastRound || lastThrow == 1) ? purpleBall() : yellowBall() }
       </div>
     </div>
   );
 
-  const scoreNavStrike12 = (num) => (
-    <div style={{display: num === 10 && isStrike(11) && !isSpare(10) ? 'block' : 'none'}}
+  const scoreNavStrike11 = (num) => (
+    <div style={{display: num === 10 && isStrike(10) && isStrike(11) ? 'block' : 'none'}}
         className={(currentRound === num || (currentRound >= 10 && num === 10 && lastRound > 10) ? 
-          styles.currentBorder + ' ':'') +  styles.carousel__nav_div + (num > lastRound ? ' ' + styles.carousel__nav_div_disabled : '')}>
+          styles.currentBorder + ' ':'') +  styles.carousel__nav_div + (num > lastRound ? ' ' + styles.carousel__nav_div_disabled : '')}
+          onClick={() => (num <= lastRound) && changeCurrentRound(10)}>
       <div  className={styles.carousel__nav_div_sub_div}>
           { (num < lastRound) ? scorePinsResume(12) : (num > lastRound || lastThrow == 1) ? yellowBall() : '' }
       </div>
@@ -457,7 +473,7 @@ export default function Bowls() {
   );
 
   const containerBowling = () => (
-    <div style={{marginTop: isStrike(11) ? '-80px' : (isStrike(10) || isSpare(10)) ? '-40px' : ''}}>
+    <div style={{marginTop: isStrike(10) && isStrike(11) ? '-80px' : ((currentRound === 11 || currentRound === 12) && (isStrike(10) || isSpare(10))) ? '-40px' : ''}}>
       <div id="bowls" className={styles.bowls}>
         {array10.map((item) => bowl(item))}
       </div>
@@ -480,21 +496,30 @@ export default function Bowls() {
       <div className={styles.ballsToTake}>
         {(showSelectThrowBall(currentRound, 1)) && <div onClick={selectFirstThrow}>{greenBall()}</div>}
         {(showSelectThrowBall(currentRound, 2)) && <div onClick={selectSecondThrow}>{purpleBall()}</div>}
+        {(showSelectThrowBall(currentRound, 2)) && 
+          <div style={{display: (currentRound == 12 || (currentRound == 11 && (currentThrow == 2 || isSpare(10)))) ? 
+          'block' : 'none'}} onClick={selectThirdThrow}>{yellowBall()}</div>}
       </div>
     </div>
   );
 
   return (
     <div id="container" className={styles.container}>
+      <div style={{position: 'absolute', top: 0, left: 0, fontSize: 10, fontWeight: 'bold'}}>
+        currentRound {currentRound}<br/>
+        currentThrow {currentThrow}<br/>
+        lastRound    {lastRound}<br/>
+        lastThrow    {lastThrow}<br/>
+      </div>
       {score()}
       <div className={styles.carousel__nav}>
         {array10.map((item) => scoreNav(item))}
       </div>
       <div className={styles.carousel__nav1112}>
-        {array10.map((item) => scoreNavStrike11(item))}
+        {array10.map((item) => scoreNavStrikeSpare10(item))}
       </div>
       <div className={styles.carousel__nav1112}>
-        {array10.map((item) => scoreNavStrike12(item))}
+        {array10.map((item) => scoreNavStrike11(item))}
       </div>
       {isGameFinished() ? '' : containerBowling()}
     </div>
