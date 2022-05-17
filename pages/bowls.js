@@ -2,7 +2,7 @@ import styles from '../styles/Bowls.module.css';
 import { useState, useEffect } from 'react';
 
 export default function Bowls() {
-
+  const debug = true;
   const array10 = Array.from({ length: 10 }, (_, i) => i + 1);
 
   const getInitialRounds = () => {
@@ -118,11 +118,10 @@ export default function Bowls() {
     const strike = strikeButton().props.className === $event.target.className;
     const spare = spareButton().props.className === $event.target.className;
 
-    if (strike) {
+    if (currentThrow === 1) {
       rounds[currentRound][currentThrow + 1] = new Set();
-    } else if (spare) {
-    } else if (isGameFinished && currentRound === 10 || currentThrow === 1) {
-      rounds[currentRound][currentThrow + 1] = new Set();
+    } 
+    if (currentRound === 10) {
       reset1112();
     } 
 
@@ -255,6 +254,11 @@ export default function Bowls() {
     return (round < currentRound || throw_ < currentThrow) ? styles.usedBall : '';
   };
 
+  const visibleThirdThrowPoints = () => {
+    return currentRound >= 10 
+      && isStrike(10) || isSpare(10);
+  }
+
   const score = () => (
     <div className={styles.scoreBox}>
       <div className={styles.headerBox}>
@@ -264,9 +268,9 @@ export default function Bowls() {
       </div>
       <div className={styles.bodyBox}>
         <div className={styles.rowA}>
-          <div style={{width: currentRound >= 10 ? '33%' : ''}} className={styles.columnA}>{showScoreFirstThrow(currentRound >= 10 ? 10 : currentRound)}</div>
-          <div style={{width: currentRound >= 10 ? '33%' : ''}} className={styles.columnB}>{showScoreSecondThrow(currentRound >= 10 ? 10 : currentRound)}</div>
-          <div style={{display: currentRound >= 10 ? '' : 'none', width: currentRound >= 10 ? '33%' : ''}} className={styles.columnB}>{showScoreThirdThrow(currentRound >= 10 ? 10 : currentRound)}</div>
+          <div style={{width: visibleThirdThrowPoints() ? '33%' : ''}} className={styles.columnA}>{showScoreFirstThrow(currentRound >= 10 ? 10 : currentRound)}</div>
+          <div style={{width: visibleThirdThrowPoints() ? '33%' : ''}} className={styles.columnB}>{showScoreSecondThrow(currentRound >= 10 ? 10 : currentRound)}</div>
+          <div style={{display: visibleThirdThrowPoints() ? '' : 'none', width: visibleThirdThrowPoints() ? '33%' : ''}} className={styles.columnB}>{showScoreThirdThrow(currentRound >= 10 ? 10 : currentRound)}</div>
         </div>
         <div className={styles.rowB}>{getScore(currentRound>=10 ? 10 : currentRound)}</div>
       </div>
@@ -351,7 +355,7 @@ export default function Bowls() {
         || !isStrike(roundNumber)
       );
     } else {
-      return currentThrow != throwNumber && throwNumber === 1;
+      return currentThrow != throwNumber && (!currentThrow || currentThrow === 1) && throwNumber === 1;
       ;
     }
 
@@ -369,6 +373,8 @@ export default function Bowls() {
       resultStyle = styles.pinResumeYellow;
     } else if (roundNum === 11 && isStrike(10) && (rounds[roundNum][1] && rounds[roundNum][1].has(item))) {
       resultStyle = styles.pinResumePurple;
+    } else if (roundNum === 11 && isStrike(10) && (rounds[roundNum][2] && rounds[roundNum][2].has(item))) {
+      resultStyle = styles.pinResumeYellow;
     } else if (roundNum === 11 && isSpare(10) && rounds[roundNum][1] && rounds[roundNum][1].has(item)) {
       resultStyle = styles.pinResumeYellow;
     } else if (rounds[roundNum][1] && rounds[roundNum][1].has(item)) {
@@ -509,7 +515,7 @@ export default function Bowls() {
 
   return (
     <div id="container" className={styles.container}>
-      <div style={{position: 'absolute', top: 0, left: 0, fontSize: 10, fontWeight: 'bold'}}>
+      <div style={{position: 'absolute', top: 0, left: 0, fontSize: 10, fontWeight: 'bold', display: debug ? 'block' : 'none'}}>
         currentRound {currentRound}<br/>
         currentThrow {currentThrow}<br/>
         lastRound    {lastRound}<br/>
