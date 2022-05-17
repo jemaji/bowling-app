@@ -101,11 +101,12 @@ export default function Bowls() {
 
   const reset1112 = () => {
     if (currentRound === 10) {
+      rounds[10][2] = new Set();
       rounds[11][1] = new Set();
       rounds[11][2] = new Set();
       rounds[12][1] = new Set();
+      setLastRound(11);
     }
-    setLastRound(11);
   }
 
   const throwBall = ($event) => {
@@ -119,10 +120,11 @@ export default function Bowls() {
 
     if (strike) {
       rounds[currentRound][currentThrow + 1] = new Set();
-      reset1112();
     } else if (spare) {
+    } else if (isGameFinished && currentRound === 10 || currentThrow === 1) {
+      rounds[currentRound][currentThrow + 1] = new Set();
       reset1112();
-    }
+    } 
 
     // const clickOnStrikeOrSpareButton = [spareButton().props.className, strikeButton().props.className].includes($event.target.className);
     rounds[currentRound][currentThrow] = strike || spare ? activeAllPins() : animatedPins;
@@ -288,12 +290,9 @@ export default function Bowls() {
   }
 
   const changeCurrentRound = (roundNum) => {
-    console.log(roundNum);
-
     if (roundNum == lastRound) {
       return changeCurrentRoundToLastRound();
     }
-    console.log(rounds[9][2])
     setAnimatedPins(new Set());
     setCurrentRound(roundNum);
     setCurrentThrow(null);
@@ -339,7 +338,9 @@ export default function Bowls() {
   }
 
   const showSelectThrowBall = (roundNumber, throwNumber) => {
-    return currentThrow != throwNumber
+    if (roundNumber < 10) {
+      return currentThrow != throwNumber
+      && throwNumber !== 3
       && (
         roundNumber <= lastRound
         || throwNumber == null
@@ -349,6 +350,11 @@ export default function Bowls() {
         throwNumber != 2
         || !isStrike(roundNumber)
       );
+    } else {
+      return currentThrow != throwNumber && throwNumber === 1;
+      ;
+    }
+
   }
 
   const scorePinsResume = (roundNum) => (
@@ -496,9 +502,7 @@ export default function Bowls() {
       <div className={styles.ballsToTake}>
         {(showSelectThrowBall(currentRound, 1)) && <div onClick={selectFirstThrow}>{greenBall()}</div>}
         {(showSelectThrowBall(currentRound, 2)) && <div onClick={selectSecondThrow}>{purpleBall()}</div>}
-        {(showSelectThrowBall(currentRound, 2)) && 
-          <div style={{display: (currentRound == 12 || (currentRound == 11 && (currentThrow == 2 || isSpare(10)))) ? 
-          'block' : 'none'}} onClick={selectThirdThrow}>{yellowBall()}</div>}
+        {(showSelectThrowBall(currentRound, 3)) && <div onClick={selectThirdThrow}>{yellowBall()}</div>}
       </div>
     </div>
   );
