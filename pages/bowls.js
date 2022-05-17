@@ -130,6 +130,7 @@ export default function Bowls() {
 
     setFootBowling(new Set([...footBowling].filter(pingNumber => !rounds[currentRound][currentThrow].has(pingNumber))));
     setRounds({ ...(rounds) });
+    setLastThrow(currentThrow);
 
     // TODO: (DISCUSS) When in new first throw of round hit a bowl recorded on second round
     // Caused inconsistent error:
@@ -328,6 +329,7 @@ export default function Bowls() {
       setAnimatedPins(rounds[11][1]);
     }
     setCurrentThrow(2);
+    setLastThrow(2);
     setFootBowling(new Set([...array10].filter(pingNumber => !rounds[currentRound][1].has(pingNumber))));
     setAnimatedPins(rounds[currentRound][2]);
   }
