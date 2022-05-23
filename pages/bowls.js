@@ -29,6 +29,7 @@ export default function Bowls() {
   const [animatedPins, setAnimatedPins] = useState(new Set());
   const [rollingBall, setRollingBall] = useState(false);
   const [footBowling, setFootBowling] = useState(new Set(array10));
+  const [gameFinished, setGameFinished] = useState(false);
 
   const initialiceProperties = () => {
     setLastRound(1);
@@ -73,17 +74,30 @@ export default function Bowls() {
       updateLastRound();
     }
 
-    return nextLastRound();
+    nextLastRound();
+
+    if (isGameFinished())
+      setGameFinished(true);
   };
+
+  const isGameFinished = () => {
+    return (currentRound === 11 && !hasRound11()) 
+      || (currentRound === 11 && currentThrow === 2 && isSpare(10))
+      || (currentRound === 12 && !hasRound12()) 
+      || (currentRound === 12 && currentThrow === 2) 
+      || (currentRound === 13);
+  }
 
   const nextLastRound = () => {
     if (currentThrow == 2 || isStrike(currentRound)) {
-      setCurrentRound(currentRound + 1);
-      setCurrentThrow(1);
-      upAllPins();
       if (currentThrow == 1) {
         rounds[currentRound][2] = new Set();
       }
+      if (lastThrow === 1) {
+        setCurrentRound(lastRound);
+        setCurrentThrow(lastThrow);
+      }
+      upAllPins();
       return;
     }
 
@@ -286,14 +300,6 @@ export default function Bowls() {
     return hasRound11() && isStrike(11) && !isSpare(10);
   }
 
-  const isGameFinished = () => {
-    return (currentRound === 11 && !hasRound11()) 
-      || (currentRound === 11 && currentThrow === 2 && isSpare(10))
-      || (currentRound === 12 && !hasRound12()) 
-      || (currentRound === 12 && currentThrow === 2) 
-      || (currentRound === 13)
-  }
-
   const changeCurrentRound = (roundNum) => {
     if (roundNum == lastRound) {
       return changeCurrentRoundToLastRound();
@@ -486,6 +492,11 @@ export default function Bowls() {
     </div>
   );
 
+  const endGame = () => {
+    return <div className={styles.endGame}> 
+    </div>
+  }
+
   const containerBowling = () => (
     <div style={{marginTop: isStrike(10) && isStrike(11) ? '-80px' : ((currentRound === 11 || currentRound === 12) && (isStrike(10) || isSpare(10))) ? '-40px' : ''}}>
       <div id="bowls" className={styles.bowls}>
@@ -533,7 +544,7 @@ export default function Bowls() {
       <div className={styles.carousel__nav1112}>
         {array10.map((item) => scoreNavStrike11(item))}
       </div>
-      {isGameFinished() ? '' : containerBowling()}
+      {!isGameFinished() ? containerBowling() : endGame()}
     </div>
   );
 }
