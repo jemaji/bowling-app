@@ -84,24 +84,24 @@ export default function Bowls() {
     return (currentRound === 11 && !hasRound11()) 
       || (currentRound === 11 && currentThrow === 2 && isSpare(10))
       || (currentRound === 12 && !hasRound12()) 
-      || (currentRound === 12 && currentThrow === 2) 
+      || (currentRound === 12 && currentThrow === 2 ) 
       || (currentRound === 13);
   }
 
   const nextLastRound = () => {
     if (currentThrow == 2 || isStrike(currentRound)) {
+      setCurrentRound(currentRound + 1);
+      setCurrentThrow(1);
+      upAllPins();
+
       if (currentThrow == 1) {
         rounds[currentRound][2] = new Set();
       }
-      if (lastThrow === 1) {
-        setCurrentRound(lastRound);
-        setCurrentThrow(lastThrow);
-      }
-      upAllPins();
       return;
     }
 
     setCurrentThrow(2);
+    setLastThrow(2);
   };
 
   const updateLastRound = () => {
@@ -439,7 +439,7 @@ export default function Bowls() {
           styles.currentBorder + ' ':'') +  styles.carousel__nav_div + (num > lastRound ? ' ' + styles.carousel__nav_div_disabled : '')}
           onClick={() => (num <= lastRound) && changeCurrentRound(10)}>
       <div  className={styles.carousel__nav_div_sub_div}>
-          { (num < lastRound) ? scorePinsResume(11) : (num > lastRound || lastThrow == 1) ? purpleBall() : yellowBall() }
+          { (11 < lastRound) ? scorePinsResume(11) : (lastThrow == 1) ? purpleBall() : yellowBall() }
       </div>
     </div>
   );
@@ -450,7 +450,7 @@ export default function Bowls() {
           styles.currentBorder + ' ':'') +  styles.carousel__nav_div + (num > lastRound ? ' ' + styles.carousel__nav_div_disabled : '')}
           onClick={() => (num <= lastRound) && changeCurrentRound(10)}>
       <div  className={styles.carousel__nav_div_sub_div}>
-          { (num < lastRound) ? scorePinsResume(12) : (num > lastRound || lastThrow == 1) ? yellowBall() : '' }
+          { (12 < lastRound) ? scorePinsResume(12) : yellowBall() }
       </div>
     </div>
   );
