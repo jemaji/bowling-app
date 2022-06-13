@@ -29,7 +29,6 @@ export default function Bowls() {
   const [animatedPins, setAnimatedPins] = useState(new Set());
   const [rollingBall, setRollingBall] = useState(false);
   const [footBowling, setFootBowling] = useState(new Set(array10));
-  const [gameFinished, setGameFinished] = useState(false);
 
   const initialiceProperties = () => {
     setLastRound(1);
@@ -75,9 +74,6 @@ export default function Bowls() {
     }
 
     nextLastRound();
-
-    if (isGameFinished())
-      setGameFinished(true);
   };
 
   const isGameFinished = () => {
@@ -89,7 +85,12 @@ export default function Bowls() {
   }
 
   const nextLastRound = () => {
-    if (currentThrow == 2 || isStrike(currentRound)) {
+  //if (currentRound != lastRound) {
+    // controlar mejor si no es strike ni spare, que se realicen los 2 tiros
+    // setCurrentRound(lastRound);
+    // setCurrentThrow(lastThrow);
+  //} else 
+  if (currentThrow == 2 || isStrike(currentRound)) {
       setCurrentRound(currentRound + 1);
       setCurrentThrow(1);
       upAllPins();
@@ -100,8 +101,13 @@ export default function Bowls() {
       return;
     }
 
-    setCurrentThrow(2);
-    setLastThrow(2);
+    // control de ronda 10
+    //if (isGameFinished()) {
+      //setCurrentRound(13)
+    //} else {
+      setCurrentThrow(2);
+      setLastThrow(2);
+    //}
   };
 
   const updateLastRound = () => {
