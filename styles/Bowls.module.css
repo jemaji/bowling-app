@@ -1,21 +1,296 @@
 .container {
-  background-image: url('../images/pista.jpeg');
-  width: 380px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background-image: url('../assets/images/pista.jpeg');
+  width: 110%;
+  height: 900px;
+}
+
+@media (min-width: 600px) {
+  .container {
+    width: 400px;
+  }
 }
 
 .buttons {
   height: 30px;
+  display: flex;
+  justify-content: space-around;
+  width: 80%;
+  margin: 5px 0;
+}
+
+.carousel {
+  margin: 0 auto;
+  overflow: hidden;
+  text-align: center;
+  width: 100%;
+  position: relative;
+}
+
+.slides {
+  display: flex;
+  overflow-x: scroll;
+  scroll-snap-type: x mandatory;
+  scroll-behavior: smooth;
+  overflow: hidden;
+  padding: 5px;
+}
+
+.slides-item {
+  align-items: center;
+  border-radius: 10px;
+  display: flex;
+  flex-shrink: 0;
+  height: 80px;
+  justify-content: center;
+  margin: 0 1rem;
+  position: relative;
+  scroll-snap-align: start;
+  transform: scale(1);
+  transform-origin: center center;
+  transition: transform .5s;
+  width: 100%;
+}
+
+.carousel__nav {
+  display: flex;
+  width: 100%;
+  margin-top: 7px;
+  justify-content: space-around;
+}
+
+.carousel__nav1112 {
+  display: flex;
+  width: 100%;
+  margin-top: 7px;
+  justify-content: flex-end;
+}
+
+.carousel__nav_div {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid #000;
+  border-radius: 17px;
+  background-color: rgba(255, 255, 255, 0.4);
+}
+
+.carousel__nav_div_disabled {
+  opacity: 0.3;
+}
+
+.carousel__nav_div_sub_div {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 35px;
+  height: 35px;
+}
+
+.carousel__nav_div_round {
+  height: 20px;
+}
+
+.carousel__nav_div_hr {
+  width: 100%;
+  border-top: 1px solid #000;
+}
+
+.greenBall {
+  width: 100%;
+  height: 100%;
+  background-size: 100%;
+  background-image: url('../assets/images/ball_green.png');
+}
+
+.purpleBall {
+  width: 100%;
+  height: 100%;
+  background-size: 100%;
+  background-image: url('../assets/images/ball_purple.png');
+}
+
+.yellowBall {
+  width: 100%;
+  height: 100%;
+  background-size: 100%;
+  background-image: url('../assets/images/ball_yellow.png');
+}
+
+.ballsToTake {
+  display: flex;
+  width: 100%;
+  justify-content: space-evenly;
+  align-items: center;
+}
+
+.ballsToTake>div {
+  width: 80px;
+  height: 80px;
+}
+
+.throwSection {
+  display: flex;
+  justify-content: space-between;
+}
+
+.throwSectionSide {
+  width: 140px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.throwSectionSideLeft {
+  display: flex;
+  justify-content: space-evenly;
+  align-items: center;
+}
+
+.strikeButton {
+  width: 100%;
+  height: 61%;
+  background-size: 100%;
+  /* background-image: url('../assets/images/strike.png'); */
+  background-image: url('../assets/images/strike.png');
+}
+
+.spareButton {
+  width: 100%;
+  height: 61%;
+  background-size: 100%;
+  background-image: url('../assets/images/spare.png');
+}
+
+.usedBall {
+  opacity: 0.3;
+}
+
+.endGame {
+  width: 100px;
+  height: 100px;
+  background-image: url('../assets/images/bowlover.png');
+}
+
+.pinsResume {
+  margin-left: -6px; /* ping width */
+  width: 0;
+  height: 0;
+  position: absolute;
+  /* background-color: red; */
+}
+
+.pinResume {
+  width: 6px;
+  height: 6px;
+  border: 2px solid #000;
+  border-radius: 3px;
+  position: absolute;
+}
+
+.pinResumeGreen {
+  border-color: green;
+  background-color: green;
+}
+
+.pinResumePurple {
+  border-color: purple;
+  background-color: purple;
+}
+
+.pinResumeYellow {
+  border-color: #ffcc00;
+  background-color: #ffcc00;
+}
+
+.pinResume1 {
+  top: 9px;
+}
+
+.pinResume2 {
+  top: 3px;
+  left: -4px;
+}
+
+.pinResume3 {
+  top: 3px;
+  left: 4px;
+}
+
+.pinResume4 {
+  top: -3px;
+  left: -8px;
+}
+
+.pinResume5 {
+  top: -3px;
+}
+
+.pinResume6 {
+  top: -3px;
+  left: 8px;
+}
+
+.pinResume7 {
+  top: -9px;
+  left: -12px;
+}
+
+.pinResume8 {
+  top: -9px;
+  left: -4px;
+}
+
+.pinResume9 {
+  top: -9px;
+  left: 4px;
+}
+
+.pinResume10 {
+  top: -9px;
+  left: 12px;
+}
+
+.slider-nav:hover,
+.slider-nav:active {
+  background-color: #000;
+  color: #fff;
+}
+
+.currentBorder {
+  border: 3px solid black;
 }
 
 .scoreBox {
-  margin: 0 150px 20px 150px ;
-  height: 70px;
+  margin-top: 7px;
+  width: 10em;
+  height: 80px;
   border:3px solid grey;
 }
 
 .headerBox {
   border-bottom: 3px solid black;
   text-align: center;
+  height: 28px;
+}
+
+.throw {
+  position: absolute;
+  display: inline-block;
+  background-size: 100%;
+  width: 25px;
+  padding-top:25px;
+}
+
+.throw_ball_1 {
+  left: 113px;
+}
+
+.throw_ball_2 {
+  left: 140px;
 }
 
 .rowA {
@@ -48,259 +323,316 @@
 
 .bowls {
   height: 220px;
-  padding-top: 20px;
-  padding-bottom: 20px;
+  margin-top: 20px;
+  margin-bottom: 20px;
+  left: -11px; /* Middle of ping width */
   position: relative;
-}
-
-.top {
-  width: 10px;
-  height: 15px;
-  position: relative;
-  left: 5px;
-  border-top: 1px solid black;
-  border-left: 1px solid black;
-  border-right: 1px solid black;
-  border-bottom: 3px solid red;
-  border-radius: 50px;
-  background-color: white;
-}
-
-.neck {
-  width: 6px;
-  height: 8px;
-  left: 7px;
-  border-left: 1px solid black;
-  border-right: 1px solid black;
-  position: relative;
-  background-color: white;
-  border-bottom: 3px solid red;
-}
-
-.bottom {
-  height: 50px;
-  width: 20px;
-  border-left: 1px solid black;
-  border-right: 1px solid black;
-  border-bottom: 1px solid black;
-  border-radius: 10px/20px;
-  background-color: white;
+  margin-left: 50%;
 }
 
 .bowl {
-  border: none;
-  background-color: transparent;
-  height: 75px;
-  width: 22px;
   position: absolute;
+  z-index: 3;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+}
+
+.pinTop {
+  border: none;
+  background-size: 100%;
+  height: 67px;
+  width: 22px;
+  z-index: 3;
+  background-image: url('../assets/images/pin.png');
+}
+
+.animatedPin {
+  animation: moveIt 1.5s ease-in-out infinite;
+  transform-origin: 50% 75%;
+}
+
+.pinShawod {
+  width: 8px;
+  height: 7px;
+  margin-top: -5px;
+  background: rgba(0, 0, 0, 0.2);
+  border-radius: 50%;
+  z-index: 1;
+}
+
+.animatedPinShadow {
+  animation: moveShade 1.5s ease-in-out infinite;
+}
+
+@keyframes moveIt {
+  from {transform: rotate(0deg); opacity: 100%; animation-timing-function: ease-out;}
+  25% {transform: rotate(8deg); opacity: 80%; animation-timing-function: ease-in;}
+  50% {transform: rotate(0deg); opacity: 100%; animation-timing-function: ease-out;}
+  75% {transform: rotate(-8deg); opacity: 80%; animation-timing-function: ease-in;}
+  to {transform: rotate(0deg);opacity: 100%; }
+}
+
+@keyframes moveShade {
+  from {transform: translateX(0px); filter: blur(3px); opacity: 100%; animation-timing-function: ease-out;}
+  25% {transform: translateX(10px) scale(3, 0.9); filter: blur(4px); opacity: 80%; animation-timing-function: ease-in;}
+  50% {transform: translateX(0px); filter: blur(3px); opacity: 100%; animation-timing-function: ease-out;}
+  75% {transform: translateX(-10px) scale(3, .9); filter: blur(4px); opacity: 80%; animation-timing-function: ease-in;}
+  to {transform: translateX(0px); filter: blur(3px); opacity: 100%;}
+}
+
+.actionForAllPins {
+  position: relative;
+}
+
+.ball {
+  border: none;
+  background-size: 100%;
+  position: relative;
+  height: 120px;
+  width: 120px;
   z-index: 3;
 }
 
+.animatedBall {
+  animation: rollingBall 0.5s forwards linear;
+}
+
+@keyframes rollingBall {
+  50% {
+    transform: rotate(22deg);
+    opacity: 100%;
+    top: 0px;
+  }
+  100% {
+    transform: rotate(-215deg);
+    opacity: 0;
+    top: -100px;
+  }
+}
+
 .pin1 {
-  left: 180px;
-  top: 125px;
+  top: 135px;
+}
+
+.pin2 {
+  left: -30px;
+  top: 90px;
+}
+
+.pin3 {
+  left: 30px;
+  top: 90px;
+}
+
+.pin4 {
+  left: -60px;
+  top: 45px;
+}
+
+.pin5 {
+  top: 45px;
+}
+
+.pin6 {
+  left: 60px;
+  top: 45px;
+}
+
+.pin7 {
+  left: -90px;
+}
+
+.pin8 {
+  left: -30px;
+}
+
+.pin9 {
+  left: 30px;
+}
+
+.pin10 {
+  left: 90px;
 }
 
 .pum1 {
   animation: pum1 1s forwards linear;
 }
 
-@keyframes pum1 {
-  50% {
-    transform: rotate(-12deg);
-    left: 180px;
-    top: 125px;
-  }
-  100% {
-    transform: rotate(-435deg);
-    top: 20px;
-    left: 30px;
-  }
-}
-
-.pin2 {
-  left: 150px;
-  top: 95px;
-}
 
 .pum2 {
   animation: pum2 1s forwards linear;
 }
 
-@keyframes pum2 {
-  50% {
-    transform: rotate(-12deg);
-    left: 150px;
-    top: 95px;
-  }
-  100% {
-    transform: rotate(-315deg);
-    top: 0px;
-    left: 40px;
-  }
-}
-
-.pin3 {
-  left: 210px;
-  top: 95px;
-}
 
 .pum3 {
   animation: pum3 1s forwards linear;
 }
 
-@keyframes pum3 {
-  50% {
-    transform: rotate(12deg);
-    left: 210px;
-    top: 95px;
-  }
-  100% {
-    transform: rotate(-435deg);
-    top: 20px;
-    left: 330px;
-  }
-}
-
-.pin4 {
-  left: 120px;
-  top: 50px;
-}
 
 .pum4 {
   animation: pum4 1s forwards linear;
 }
 
-@keyframes pum4 {
-  50% {
-    transform: rotate(-22deg);
-    left: 120x;
-    top: 50px;
-  }
-  100% {
-    transform: rotate(-415deg);
-    top: 10px;
-    left: 40px;
-  }
-}
-
-.pin5 {
-  left: 180px;
-  top: 50px;
-}
 
 .pum5 {
   animation: pum5 1s forwards linear;
 }
 
-@keyframes pum5 {
-  50% {
-    transform: rotate(22deg);
-    left: 180x;
-    top: 50px;
-  }
-  100% {
-    transform: rotate(-415deg);
-    top: 10px;
-    left: 340px;
-  }
-}
-
-.pin6 {
-  left: 240px;
-  top: 50px;
-}
 
 .pum6 {
   animation: pum6 1s forwards linear;
 }
 
-@keyframes pum6 {
-  50% {
-    transform: rotate(12deg);
-    left: 240px;
-    top: 50px;
-  }
-  100% {
-    transform: rotate(-315deg);
-    top: 0px;
-    left: 340px;
-  }
-}
-
-.pin7 {
-  left: 90px;
-}
 
 .pum7 {
   animation: pum7 1s forwards linear;
 }
 
-@keyframes pum7 {
-  50% {
-    transform: rotate(-12deg);
-    left: 90px;
-  }
-  100% {
-    transform: rotate(-385deg);
-    left: 34px;
-  }
-}
-
-.pin8 {
-  left: 150px;
-}
 
 .pum8 {
   animation: pum8 1s forwards linear;
 }
 
-@keyframes pum8 {
-  50% {
-    transform: rotate(-12deg);
-    left: 150px;
-  }
-  100% {
-    transform: rotate(-305deg);
-    left: 42px;
-  }
-}
-
-.pin9 {
-  left: 210px;
-}
 
 .pum9 {
   animation: pum9 1s forwards linear;
 }
 
-@keyframes pum9 {
-  50% {
-    transform: rotate(12deg);
-    left: 210px;
-  }
-  100% {
-    transform: rotate(-305deg);
-    left: 320px;
-  }
-}
-
-.pin10 {
-  left: 270px;
-}
 
 .pum10 {
   animation: pum10 1s forwards linear;
 }
 
+@keyframes pum1 {
+  50% {
+    transform: rotate(22deg);
+    opacity: 100%;
+    left: -10x;
+    top: 110px;
+  }
+  100% {
+    transform: rotate(-215deg);
+    opacity: 0;
+    left: -70x;
+    top: 0px;
+  }
+}
+
+@keyframes pum2 {
+  50% {
+    transform: rotate(-12deg);
+    opacity: 100%;
+    top: 80px;
+    left: -35px;
+  }
+  100% {
+    transform: rotate(-155deg);
+    opacity: 0;
+    top: 0px;
+    left: -80px;
+  }
+}
+
+@keyframes pum3 {
+  50% {
+    transform: rotate(12deg);
+    left: 40px;
+    opacity: 100%;
+    top: 80px;
+  }
+  100% {
+    transform: rotate(-235deg);
+    opacity: 0;
+    top: 20px;
+    left: 120px;
+  }
+}
+
+@keyframes pum4 {
+  50% {
+    transform: rotate(-22deg);
+    opacity: 100%;
+    left: -60x;
+    top: 30px;
+  }
+  100% {
+    transform: rotate(-215deg);
+    opacity: 0;
+    left: -100px;
+  }
+}
+
+@keyframes pum5 {
+  50% {
+    transform: rotate(22deg);
+    opacity: 100%;
+    left: -10x;
+    top: 30px;
+  }
+  100% {
+    transform: rotate(-215deg);
+    opacity: 0;
+    left: -10x;
+    top: 0px;
+  }
+}
+
+@keyframes pum6 {
+  50% {
+    transform: rotate(12deg);
+    opacity: 100%;
+    left: 60px;
+    top: 30px;
+  }
+  100% {
+    transform: rotate(-315deg);
+    opacity: 0;
+    left: 100px;
+  }
+}
+
+@keyframes pum7 {
+  50% {
+    transform: rotate(-12deg);
+    opacity: 100%;
+  }
+  100% {
+    transform: rotate(-165deg);
+    opacity: 0;
+  }
+}
+
+@keyframes pum8 {
+  50% {
+    transform: rotate(-12deg);
+    opacity: 100%;
+  }
+  100% {
+    transform: rotate(-155deg);
+    opacity: 0;
+  }
+}
+
+@keyframes pum9 {
+  50% {
+    transform: rotate(12deg);
+    opacity: 100%;
+  }
+  100% {
+    transform: rotate(-155deg);
+    opacity: 0;
+  }
+}
+
 @keyframes pum10 {
   50% {
     transform: rotate(12deg);
-    left: 270px;
+    opacity: 100%;
   }
   100% {
-    transform: rotate(-385deg);
-    top: 5px;
-    left: 320px;
+    transform: rotate(-165deg);
+    opacity: 0;
   }
 }
